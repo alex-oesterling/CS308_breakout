@@ -36,7 +36,6 @@ be random and have a "slot machine" selection process for which power up I get.
 ### Power Up Ideas
 - Fireball: Each collision breaks "two lives" of a block
 - Ghost: The next time the ball would collide with blocks, it passes through until it reaches an empty space
- (graphics become translucent and ball becomes spooky)
  - Seeker: The ball will always go towards the direction of the mouse
  - Wrecking Ball: The ball maintains its momentum if it breaks a block
  - Inverse: Negative power up, pressing right moves the bouncer left and vice versa
