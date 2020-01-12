@@ -16,12 +16,16 @@ shot. This variant is interesting because it appeals to the modern mobile game t
 instead of requiring careful attention (moving the bouncer to keep the ball in the air),
 the player can just launch the balls and let them bounce without having to do anything.
 ### General Level Descriptions
-- 
+- Time permitting, I want to try randomly-generated levels, but for now, I think I will stick with creating tailored levels 
+and focus on the game mechanics. I want to make fun shapes or levels with a lot of power-ups for 
+maximum chaos. Here are some of my designs:
+![Level Design](Level_Idea.png)
+![Portal_Breaker](Portal_Breaker.png)
 ### Bricks Ideas
 - I most definitely want to create a "portal" brick. I plan on making each level have multiple "boards,"
 and hitting a portal will teleport you to the other board. You cannot see all the boards together
 and have to teleport back and forth between areas in order to clear the entire level. I could make it so 
-you can only enter the portal from a certain direction, or launch out the ball at a certain direction too.
+you can only enter the portal from a certain direction, or have it launch the ball out at a certain direction.
 - I also was thinking of a "magnet" or "gravity" brick which would create a force field and bend the trajectory of the
 ball. However, this would require a lot of physics and I do not think I will do it in the end,
 unless I get some amazing idea or improvement in my coding abilities.
@@ -43,7 +47,8 @@ be random and have a "slot machine" selection process for which power up I get.
 
 ### Cheat Key Ideas
 - At first I was thinking about a certain key sequence to activate a super mode, but I am worried that 
-a series of key detections will be too complex. For this reason, I think I may put a secret "menu option"
+a series of key detections will be too complex. For this reason, I think I may put a secret 
+"menu option" such as a hidden button in the corner
 which when clicked starts the game but with the ball following the mouse cursor (seeker mode)
 ### Something Extra
 - My extra component will the the portal mechanic, where each level consists of multiple stages where the ball must 
