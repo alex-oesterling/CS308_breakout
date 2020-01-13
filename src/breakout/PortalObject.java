@@ -10,6 +10,7 @@ public abstract class PortalObject {
     private int x, y;
     private Group image;
     public PortalObject(){
+        image = new Group();
     }
     public int getX(){return x;}
     public int getY(){return y;}
@@ -19,5 +20,5 @@ public abstract class PortalObject {
 
     public abstract void update(Scene scene, int elapsedTime);
 
-    public abstract void getImage();
+    public abstract Group getImage();
 }

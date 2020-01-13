@@ -12,7 +12,6 @@ public class Ball extends PortalObject {
     public Ball(){
         xVel = Math.random()*50;
         yVel = Math.sqrt(Math.pow(50, 2) + Math.pow(xVel, 2));
-        image = new Group;
     }
 
     /**
@@ -40,7 +39,7 @@ public class Ball extends PortalObject {
     }
 
     @Override
-    public void getImage() {
+    public Group getImage() {
 
     }
 
