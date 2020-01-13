@@ -1,7 +1,14 @@
 package breakout;
 
-public class PortalObject {
+import javafx.scene.Group;
+import javafx.scene.Scene;
+
+/**
+ * @author me
+ */
+public abstract class PortalObject {
     private int x, y;
+    private Group image;
     public PortalObject(){
     }
     public int getX(){return x;}
@@ -10,5 +17,7 @@ public class PortalObject {
     public void setX(int a){x = a;}
     public void setY(int b){y = b;}
 
-    public void update(){};
+    public abstract void update(Scene scene, int elapsedTime);
+
+    public abstract void getImage();
 }

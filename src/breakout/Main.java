@@ -3,11 +3,13 @@ package breakout;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -74,7 +76,6 @@ public class Main extends Application {
         }
     }
 
-
     private Scene setupGame(int width, int height, Paint background) {
         // create one top level collection to organize the things in the scene
         Group root = new Group();
@@ -111,6 +112,17 @@ public class Main extends Application {
         // create a place to see the shapes
         Scene scene = new Scene(root, width, height, background);
         // respond to input
+
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                handleKeyInput(event.getCode());
+            }
+        });
+
+        scene.setOnKeyPressed(e -> {
+            System.out.println(e);
+        });
 
         scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
 
