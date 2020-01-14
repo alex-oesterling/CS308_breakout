@@ -1,5 +1,6 @@
 package breakout;
 
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,14 +9,11 @@ import javafx.scene.input.KeyCode;
 public class Bumper extends PortalObject {
     private static final int VELOCITY = 5;
 
-    public Bumper(Scene scene, String imagefile) throws NullPointerException{
-        super(scene, imagefile);
+    public Bumper(String imagefile, Group root){
+        super(imagefile, root);
 
         this.getImage().setFitHeight(20);
         this.getImage().setFitWidth(100);
-
-        this.setX(this.getScene().getWidth()/2 - this.getImage().getBoundsInLocal().getWidth()/2);
-        this.setY(this.getScene().getHeight()-this.getImage().getBoundsInLocal().getHeight());
 
     }
 

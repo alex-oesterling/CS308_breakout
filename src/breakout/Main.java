@@ -32,12 +32,11 @@ public class Main extends Application {
     public static final String BOUNCER_IMAGE = "ball.png";
     private static final int BUMPER_SPEED = 10;
 
-    public int xVel, yVel;
     private Scene myScene;
-    private ImageView myBouncer;
     private Ball ball;
     private Bumper bumper;
-    private ImageView myBumper;
+    private Brick brick;
+    private Group root;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -55,41 +54,42 @@ public class Main extends Application {
     }
 
     private void update(double elapsedTime) {
-        //BOUNCER MOTION
-        /*
-        myBouncer.setX(myBouncer.getX() + xVel * elapsedTime);
-        myBouncer.setY(myBouncer.getY() + yVel * elapsedTime);
-
-        if(myBouncer.getX() >= myScene.getWidth()-myBouncer.getBoundsInLocal().getWidth()){
-            xVel *=-1;
-        }
-        if(myBouncer.getX() <= 0){
-            xVel *=-1;
-        }
-        if(myBouncer.getY() >= myScene.getHeight()-myBouncer.getBoundsInLocal().getHeight()){
-            yVel *=-1;
-        }
-        if(myBouncer.getY() <= 0){
-            yVel *=-1;
-        }
-
-         */
         ball.update(elapsedTime);
         //Collision with bumper
         bumper.update(elapsedTime);
+        brick.update(elapsedTime);
 
+        if(ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())){
+            ball.setYVel(ball.getYVel()*-1);
+        }
+        if(ball.getY() >= ball.getScene().getHeight()){
+            ball.setY(200);
+            //root.getChildren().remove(ball.getImage());
+        }
 
     }
 
     private Scene setupGame(int width, int height, Paint background) {
-        Group root = new Group();
-        Group rootemp = new Group();
-        Scene temp = new Scene(rootemp, width, height, background);
-        ball = new Ball(temp, BOUNCER_IMAGE);
-        bumper = new Bumper(temp, BOUNCER_IMAGE);
+        root = new Group();
+
+        ball = new Ball(BOUNCER_IMAGE, root);
+        bumper = new Bumper(BOUNCER_IMAGE, root);
+        brick = new Brick("brick.png", root);
+
         root.getChildren().add(ball.getImage());
         root.getChildren().add(bumper.getImage());
+        root.getChildren().add(brick.getImage());
+
         Scene scene = new Scene(root, width, height, background);
+
+        ball.setScene(scene);
+        bumper.setScene(scene);
+        brick.setScene(scene);
+
+        brick.setX(0);
+        brick.setY(0);
+        bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
+        bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
         return scene;
     }
 

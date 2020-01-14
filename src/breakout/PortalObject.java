@@ -18,13 +18,9 @@ public abstract class PortalObject {
     private Scene scene;
 
     public PortalObject(){}
-    public PortalObject(Scene s, String imagefile) throws NullPointerException{
-        if(s == null){
-            throw new NullPointerException("ASDF");
-        }
-        scene = s;
-        myImage = new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(imagefile)));
-        //this.changeImage(imagefile);
+    public PortalObject(String imagefile, Group root){
+        this.setImage(new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(imagefile))));
+        group = root;
     }
     public double getX(){return x;}
     public double getY(){return y;}
@@ -41,7 +37,6 @@ public abstract class PortalObject {
     public abstract void update(double elapsedTime);
 
     public ImageView getImage(){return myImage;}
-
     /**
      * necessary?
      * @param a
@@ -51,13 +46,16 @@ public abstract class PortalObject {
     public Scene getScene(){return scene;}
     public void setScene(Scene a){scene = a;}
 
+    public Group getGroup(){return group;}
+
     /**
      * Changes image of ball - useful for when ball becomes powered up
      * CLEAN UP
      * @param imagefile - Image to replace ball's current image.
      */
     public void changeImage(String imagefile){
-        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(imagefile));
-        myImage = new ImageView(image);
+        this.getGroup().getChildren().remove(this.getImage());
+        this.setImage(new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(imagefile))));
+        this.getGroup().getChildren().add(this.getImage());
     }
 }

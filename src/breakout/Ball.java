@@ -15,8 +15,8 @@ public class Ball extends PortalObject {
      * Constructor
      * @param imagefile
      */
-    public Ball(Scene scene, String imagefile){
-        super(scene,imagefile);
+    public Ball(String imagefile, Group root){
+        super(imagefile, root);
         xVel = Math.random()*50;
         yVel = Math.sqrt(Math.pow(VELOCITY, 2) + Math.pow(xVel, 2));
         this.getImage().setFitWidth(50);
@@ -34,13 +34,17 @@ public class Ball extends PortalObject {
         this.getScene().getWidth();
         if(this.getX() >= this.getScene().getWidth()-this.getImage().getBoundsInLocal().getWidth()){
             xVel *=-1;
+            this.changeImage("brick3.png");
         }
         if(this.getX() <= 0){
             xVel *=-1;
         }
+        /*
         if(this.getY() >= this.getScene().getHeight()-this.getImage().getBoundsInLocal().getHeight()){
             yVel *=-1;
         }
+
+         */
         if(this.getY() <= 0){
             yVel *=-1;
         }
@@ -51,4 +55,11 @@ public class Ball extends PortalObject {
     public double getYVel(){return yVel;}
     public void setXVel(double a){xVel = a;}
     public void setYVel(double b){yVel = b;}
+
+    @Override
+    public void changeImage(String imagefile){
+        super.changeImage(imagefile);
+        this.getImage().setFitHeight(50);
+        this.getImage().setFitWidth(50);
+    }
 }
