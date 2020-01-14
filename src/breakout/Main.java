@@ -36,6 +36,7 @@ public class Main extends Application {
     private Scene myScene;
     private ImageView myBouncer;
     private Ball ball;
+    private Bumper bumper;
     private ImageView myBumper;
 
     @Override
@@ -73,71 +74,26 @@ public class Main extends Application {
         }
 
          */
-        ball.update(myScene, elapsedTime);
+        ball.update(elapsedTime);
         //Collision with bumper
-
-        if(myBumper.getBoundsInLocal().intersects(ball.getImage().getBoundsInLocal())){
-            ball.setYVel(ball.getYVel()*-1);
-        }
+        bumper.update(elapsedTime);
 
 
     }
 
     private Scene setupGame(int width, int height, Paint background) {
-        // create one top level collection to organize the things in the scene
         Group root = new Group();
-
-        // make bouncer
-        ball = new Ball(BOUNCER_IMAGE);
-
+        Group rootemp = new Group();
+        Scene temp = new Scene(rootemp, width, height, background);
+        ball = new Ball(temp, BOUNCER_IMAGE);
+        bumper = new Bumper(temp, BOUNCER_IMAGE);
         root.getChildren().add(ball.getImage());
-
-        // make bumper
-        Image bumps = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
-        myBumper = new ImageView(bumps);
-        myBumper.setFitWidth(100);
-        myBumper.setFitHeight(20);
-        myBumper.setX(width/2 - myBumper.getBoundsInLocal().getWidth()/2);
-        myBumper.setY(height-myBumper.getBoundsInLocal().getHeight());
-        /*
-        myMover = new Rectangle(width / 2 - MOVER_SIZE / 2, height / 2 - 100, MOVER_SIZE, MOVER_SIZE);
-        myMover.setFill(MOVER_COLOR);
-        myGrower = new Rectangle(width / 2 - GROWER_SIZE / 2, height / 2 + 50, GROWER_SIZE, GROWER_SIZE);
-        myGrower.setFill(GROWER_COLOR);
-         */
-        // order added to the group is the order in which they are drawn
-        root.getChildren().add(myBumper);
-
-
-        // create a place to see the shapes
+        root.getChildren().add(bumper.getImage());
         Scene scene = new Scene(root, width, height, background);
-        // respond to input
-
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                handleKeyInput(event.getCode());
-            }
-        });
-
-        scene.setOnKeyPressed(e -> {
-            System.out.println(e);
-        });
-
-        scene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-
-        //scene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
         return scene;
     }
 
-    private void handleKeyInput(KeyCode code) {
-        //avoid "jittering" by preventing the move in the first place
-        if(myBumper.getX() < myScene.getWidth()-myBumper.getBoundsInLocal().getWidth() && (code == KeyCode.RIGHT || code == KeyCode.D)){
-            myBumper.setX(myBumper.getX() + BUMPER_SPEED);
-        } else if(myBumper.getX() >0 && (code == KeyCode.LEFT || code == KeyCode.A)) {
-            myBumper.setX(myBumper.getX() - BUMPER_SPEED);
-        }
-    }
+
 
     public static void main (String[] args) {
         launch(args);

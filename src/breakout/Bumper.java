@@ -1,0 +1,38 @@
+package breakout;
+
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+
+public class Bumper extends PortalObject {
+    private static final int VELOCITY = 5;
+
+    public Bumper(Scene scene, String imagefile) throws NullPointerException{
+        super(scene, imagefile);
+
+        this.getImage().setFitHeight(20);
+        this.getImage().setFitWidth(100);
+
+        this.setX(this.getScene().getWidth()/2 - this.getImage().getBoundsInLocal().getWidth()/2);
+        this.setY(this.getScene().getHeight()-this.getImage().getBoundsInLocal().getHeight());
+
+    }
+
+
+    @Override
+    public void update(double elapsedTime) {
+       this.getScene().setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+    }
+
+    private void handleKeyInput(KeyCode code) {
+        //avoid "jittering" by preventing the move in the first place
+        if(this.getImage().getX() < this.getScene().getWidth()-this.getImage().getBoundsInLocal().getWidth() && (code == KeyCode.RIGHT || code == KeyCode.D)){
+            this.setX(this.getImage().getX() + VELOCITY);
+        } else if(this.getImage().getX() >0 && (code == KeyCode.LEFT || code == KeyCode.A)) {
+            this.setX(this.getImage().getX() - VELOCITY);
+        }
+    }
+
+
+}
