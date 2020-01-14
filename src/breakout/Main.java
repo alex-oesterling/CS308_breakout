@@ -35,6 +35,7 @@ public class Main extends Application {
     public int xVel, yVel;
     private Scene myScene;
     private ImageView myBouncer;
+    private Ball ball;
     private ImageView myBumper;
 
     @Override
@@ -54,6 +55,7 @@ public class Main extends Application {
 
     private void update(double elapsedTime) {
         //BOUNCER MOTION
+        /*
         myBouncer.setX(myBouncer.getX() + xVel * elapsedTime);
         myBouncer.setY(myBouncer.getY() + yVel * elapsedTime);
 
@@ -70,10 +72,15 @@ public class Main extends Application {
             yVel *=-1;
         }
 
+         */
+        ball.update(myScene, elapsedTime);
         //Collision with bumper
-        if(myBouncer.getBoundsInLocal().intersects(myBumper.getBoundsInLocal())){
-            yVel*=-1;
+
+        if(myBumper.getBoundsInLocal().intersects(ball.getImage().getBoundsInLocal())){
+            ball.setYVel(ball.getYVel()*-1);
         }
+
+
     }
 
     private Scene setupGame(int width, int height, Paint background) {
@@ -81,16 +88,9 @@ public class Main extends Application {
         Group root = new Group();
 
         // make bouncer
-        Image image = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
-        myBouncer = new ImageView(image);
-        myBouncer.setPreserveRatio(true);
-        //myBouncer.setFitWidth(50);
-        myBouncer.setFitHeight(50);
-        // x and y represent the top left corner, so center it in window
-        myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
-        myBouncer.setY(height / 2 - myBouncer.getBoundsInLocal().getHeight() / 2);
-        xVel = 50;
-        yVel = 50;
+        ball = new Ball(BOUNCER_IMAGE);
+
+        root.getChildren().add(ball.getImage());
 
         // make bumper
         Image bumps = new Image(this.getClass().getClassLoader().getResourceAsStream(BOUNCER_IMAGE));
@@ -106,8 +106,8 @@ public class Main extends Application {
         myGrower.setFill(GROWER_COLOR);
          */
         // order added to the group is the order in which they are drawn
-        root.getChildren().add(myBouncer);
         root.getChildren().add(myBumper);
+
 
         // create a place to see the shapes
         Scene scene = new Scene(root, width, height, background);
