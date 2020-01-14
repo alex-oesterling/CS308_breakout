@@ -55,18 +55,20 @@ public class Main extends Application {
 
     private void update(double elapsedTime) {
         ball.update(elapsedTime);
-        //Collision with bumper
         bumper.update(elapsedTime);
         brick.update(elapsedTime);
-
+        //check collisions
         if(ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())){
-            ball.setYVel(ball.getYVel()*-1);
+            ball.setYVel(Math.abs(ball.getYVel())*-1);
+            //ball.getImage().setImage(new Image(this.getClass().getClassLoader().getResourceAsStream("brick2.png")));
         }
         if(ball.getY() >= ball.getScene().getHeight()){
             ball.setY(200);
             //root.getChildren().remove(ball.getImage());
         }
-
+        if(ball.getImage().getBoundsInLocal().intersects(brick.getImage().getBoundsInLocal())){
+            root.getChildren().remove(brick.getImage());
+        }
     }
 
     private Scene setupGame(int width, int height, Paint background) {
@@ -85,7 +87,7 @@ public class Main extends Application {
         ball.setScene(scene);
         bumper.setScene(scene);
         brick.setScene(scene);
-
+        
         brick.setX(0);
         brick.setY(0);
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);

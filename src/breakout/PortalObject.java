@@ -54,8 +54,6 @@ public abstract class PortalObject {
      * @param imagefile - Image to replace ball's current image.
      */
     public void changeImage(String imagefile){
-        this.getGroup().getChildren().remove(this.getImage());
-        this.setImage(new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(imagefile))));
-        this.getGroup().getChildren().add(this.getImage());
+        this.getImage().setImage(new Image(this.getClass().getClassLoader().getResourceAsStream(imagefile)));
     }
 }

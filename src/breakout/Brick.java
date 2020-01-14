@@ -20,7 +20,7 @@ public class Brick extends PortalObject {
     public void update(double elapsedTime) {
         secondsElapsed+=elapsedTime;
         //System.out.print(secondsElapsed%3 + "\t");
-        if(secondsElapsed % 3 <= 0.1){
+        if(secondsElapsed % 3 <= 0.01){
             state++;
             //System.out.println(state);
             if(state%4 == 1) {
@@ -36,11 +36,5 @@ public class Brick extends PortalObject {
                 this.changeImage("brick.png");
             }
         }
-    }
-    @Override
-    public void changeImage(String imagefile){
-        super.changeImage(imagefile);
-        this.getImage().setFitHeight(50);
-        this.getImage().setFitWidth(50);
     }
 }

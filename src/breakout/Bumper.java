@@ -31,6 +31,4 @@ public class Bumper extends PortalObject {
             this.setX(this.getImage().getX() - VELOCITY);
         }
     }
-
-
 }
