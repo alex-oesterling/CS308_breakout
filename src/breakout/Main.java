@@ -67,7 +67,9 @@ public class Main extends Application {
             //root.getChildren().remove(ball.getImage());
         }
         if(ball.getImage().getBoundsInLocal().intersects(brick.getImage().getBoundsInLocal())){
+            
             root.getChildren().remove(brick.getImage());
+
         }
     }
 
@@ -87,11 +89,13 @@ public class Main extends Application {
         ball.setScene(scene);
         bumper.setScene(scene);
         brick.setScene(scene);
-        
+
         brick.setX(0);
         brick.setY(0);
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
         bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
+        ball.setX(bumper.getImage().getX());
+        ball.setY(bumper.getImage().getY());
         return scene;
     }
 
