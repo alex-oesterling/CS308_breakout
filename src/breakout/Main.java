@@ -67,9 +67,17 @@ public class Main extends Application {
             //root.getChildren().remove(ball.getImage());
         }
         if(ball.getImage().getBoundsInLocal().intersects(brick.getImage().getBoundsInLocal())){
-            
+            if(ball.getImage().getBoundsInLocal().getCenterX() <= brick.getImage().getBoundsInLocal().getMinX()){
+                ball.setXVel(Math.abs(ball.getXVel())*-1);
+            } else if(ball.getImage().getBoundsInLocal().getCenterX() >= brick.getImage().getBoundsInLocal().getMaxX()){
+                ball.setXVel(Math.abs(ball.getXVel()));
+            } else if(ball.getImage().getBoundsInLocal().getCenterY() <= brick.getImage().getBoundsInLocal().getMinY()){
+                ball.setYVel(Math.abs(ball.getYVel())*-1);
+            } else if(ball.getImage().getBoundsInLocal().getCenterY() >= brick.getImage().getBoundsInLocal().getMaxY()){
+                ball.setYVel(Math.abs(ball.getYVel()));
+            }
             root.getChildren().remove(brick.getImage());
-
+            //array of bricks parameter
         }
     }
 
@@ -90,8 +98,8 @@ public class Main extends Application {
         bumper.setScene(scene);
         brick.setScene(scene);
 
-        brick.setX(0);
-        brick.setY(0);
+        brick.setX(200);
+        brick.setY(200);
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
         bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
         ball.setX(bumper.getImage().getX());

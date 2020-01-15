@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Ball extends PortalObject {
-    private static final int VELOCITY = 100;
+    public static final int BALL_VELOCITY = 100;
     private double xVel, yVel;
 
     /**
@@ -17,8 +17,8 @@ public class Ball extends PortalObject {
      */
     public Ball(String imagefile, Group root){
         super(imagefile, root);
-        xVel = Math.random()*50;
-        yVel = Math.sqrt(Math.pow(VELOCITY, 2) - Math.pow(xVel, 2));
+        xVel = Math.random()*100;
+        yVel = Math.sqrt(Math.pow(BALL_VELOCITY, 2) - Math.pow(xVel, 2));
         this.getImage().setFitWidth(50);
         this.getImage().setFitHeight(50);
     }
@@ -31,7 +31,6 @@ public class Ball extends PortalObject {
     public void update(double elapsedTime) {
         this.setX(this.getX() + xVel * elapsedTime);
         this.setY(this.getY() + yVel * elapsedTime);
-        this.getScene().getWidth();
         if(this.getX() >= this.getScene().getWidth()-this.getImage().getBoundsInLocal().getWidth()){
             xVel *=-1;
             this.changeImage("brick3.png");
