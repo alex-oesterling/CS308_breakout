@@ -4,12 +4,17 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * BIG Question: How do I have a brick remove itself/make itself null?
+ */
 public class Brick extends PortalObject {
     private double secondsElapsed;
     private int state;
+    private int health;
+
     public Brick (String imagefile, Group root){
         super(imagefile, root);
-        //necessary?
+        health = 1;
         this.getImage().setFitHeight(50);
         this.getImage().setFitWidth(50);
     }
@@ -19,12 +24,10 @@ public class Brick extends PortalObject {
      */
     public void update(double elapsedTime) {
         secondsElapsed+=elapsedTime;
-        //System.out.print(secondsElapsed%3 + "\t");
         /*
         if(secondsElapsed % 3 <= 0.01){
             state++;
             secondsElapsed=0;
-            //System.out.println(state);
             if(state%4 == 1) {
                 this.changeImage("brick2.png");
             }
@@ -37,10 +40,12 @@ public class Brick extends PortalObject {
             if(state%4 == 0) {
                 this.changeImage("brick.png");
             }
-
-
         }
-
          */
     }
+    public int damage(){
+        return(health--);
+    }
+    public int getHealth(){return health;}
+    public void setHealth(int h){health = h;}
 }

@@ -1,24 +1,26 @@
 package breakout;
 
+import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Ball extends PortalObject {
-    public static final int BALL_VELOCITY = 100;
-    private double xVel, yVel;
-    private Brick[] bricks;
+import java.util.List;
 
+public class Ball extends PortalObject {
+    public static final int BALL_VELOCITY = 200;
+    private double xVel, yVel;
+    private List<Brick> bricks;
     /**
      * CLEAN UP
      * Constructor
      * @param imagefile
      */
-    public Ball(String imagefile, Group root, Brick[] b){
+    public Ball(String imagefile, Group root, List b){
         super(imagefile, root);
-        xVel = Math.random()*200-100;
+        xVel = Math.random()*400-200;
         yVel = Math.sqrt(Math.pow(BALL_VELOCITY, 2) - Math.pow(xVel, 2));
         bricks = b;
         this.getImage().setFitWidth(50);
@@ -39,30 +41,36 @@ public class Ball extends PortalObject {
         if(this.getX() <= 0){
             xVel *=-1;
         }
-        /*
-        if(this.getY() >= this.getScene().getHeight()-this.getImage().getBoundsInLocal().getHeight()){
-            yVel *=-1;
-        }
-         */
         if(this.getY() <= 0){
             yVel *=-1;
         }
-        for(Brick brick : bricks){
-            if(this.getImage().getBoundsInLocal().intersects(brick.getImage().getBoundsInLocal())) {
-                if (this.getImage().getBoundsInLocal().getCenterX() <= brick.getImage().getBoundsInLocal().getMinX()) {
-                    this.setXVel(Math.abs(this.getXVel()) * -1);
-                } else if (this.getImage().getBoundsInLocal().getCenterX() >= brick.getImage().getBoundsInLocal().getMaxX()) {
-                    this.setXVel(Math.abs(this.getXVel()));
-                } else if (this.getImage().getBoundsInLocal().getCenterY() <= brick.getImage().getBoundsInLocal().getMinY()) {
-                    this.setYVel(Math.abs(this.getYVel()) * -1);
-                } else if (this.getImage().getBoundsInLocal().getCenterY() >= brick.getImage().getBoundsInLocal().getMaxY()) {
-                    this.setYVel(Math.abs(this.getYVel()));
+        for(int i = 0; i < bricks.size(); i++){
+            if(checkIntersection(bricks.get(i))) {
+                bounceBrick(bricks.get(i));
+                if(bricks.get(i).damage() == 0){
+                    bricks.get(i).getGroup().getChildren().remove(bricks.get(i).getImage());
+                    bricks.remove(i);
                 }
-                //this.getGroup().getChildren().get(brick.getImage()) = null;
-                this.getGroup().getChildren().remove(brick.getImage());
-
-                //array of bricks parameter
             }
+        }
+    }
+    public boolean checkIntersection(Brick brick){
+        Bounds bounds = this.getImage().getBoundsInLocal();
+        return(brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX()+bounds.getWidth()/2, bounds.getCenterY(), 1, 1)
+                || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX()-bounds.getWidth()/2, bounds.getCenterY(), 1, 1)
+                || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX(), bounds.getCenterY()+bounds.getHeight()/2, 1, 1))
+                || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX(), bounds.getCenterY()-bounds.getHeight()/2, 1, 1);
+    }
+
+    public void bounceBrick(Brick brick){
+        if (this.getImage().getBoundsInLocal().getCenterX() <= brick.getImage().getBoundsInLocal().getMinX()) {
+            this.setXVel(Math.abs(this.getXVel()) * -1);
+        } else if (this.getImage().getBoundsInLocal().getCenterX() >= brick.getImage().getBoundsInLocal().getMaxX()) {
+            this.setXVel(Math.abs(this.getXVel()));
+        } else if (this.getImage().getBoundsInLocal().getCenterY() <= brick.getImage().getBoundsInLocal().getMinY()) {
+            this.setYVel(Math.abs(this.getYVel()) * -1);
+        } else if (this.getImage().getBoundsInLocal().getCenterY() >= brick.getImage().getBoundsInLocal().getMaxY()) {
+            this.setYVel(Math.abs(this.getYVel()));
         }
     }
 
