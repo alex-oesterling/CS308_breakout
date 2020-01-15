@@ -60,8 +60,20 @@ public class Main extends Application {
             b.update(elapsedTime);
         }
         //check collisions
-        if(ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())){
-            ball.setYVel(Math.abs(ball.getYVel())*-1);
+        if(ball.getYVel()>=0 && ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())){
+            double degree = Math.abs(ball.getImage().getBoundsInLocal().getCenterX() - bumper.getImage().getBoundsInLocal().getCenterX())/(bumper.getImage().getBoundsInLocal().getWidth()/2);
+            degree = Math.toRadians(90*degree);
+            System.out.println(degree);
+            ball.setYVel(Math.abs(Math.cos(degree)*Ball.BALL_VELOCITY)*-1);
+            //System.out.println(Math.abs(Math.sin(degree)*Ball.BALL_VELOCITY)*-1);
+            if(ball.getImage().getBoundsInLocal().getCenterX() < bumper.getImage().getBoundsInLocal().getCenterX()){
+                ball.setXVel(Math.abs(Math.sin(degree)*Ball.BALL_VELOCITY)*-1);
+                //System.out.println(Math.abs(Math.cos(degree)*Ball.BALL_VELOCITY)*-1);
+            }
+            else if(ball.getImage().getBoundsInLocal().getCenterX() > bumper.getImage().getBoundsInLocal().getCenterX()) {
+                ball.setXVel(Math.abs(Math.sin(degree) * Ball.BALL_VELOCITY));
+                //System.out.println(Math.abs(Math.cos(degree)*Ball.BALL_VELOCITY));
+            }
             //ball.getImage().setImage(new Image(this.getClass().getClassLoader().getResourceAsStream("brick2.png")));
         }
         if(ball.getY() >= ball.getScene().getHeight()){
@@ -73,7 +85,7 @@ public class Main extends Application {
 
     private Scene setupGame(int width, int height, Paint background) {
         root = new Group();
-        bricks = new Brick[20];
+        bricks = new Brick[5];
 
         for(int i = 0; i < bricks.length; i++){
             bricks[i] = new Brick(BOUNCER_IMAGE, root);
@@ -101,7 +113,7 @@ public class Main extends Application {
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
         bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
         ball.setX(bumper.getImage().getX());
-        ball.setY(bumper.getImage().getY());
+        ball.setY(bumper.getImage().getY()-100);
         return scene;
     }
 

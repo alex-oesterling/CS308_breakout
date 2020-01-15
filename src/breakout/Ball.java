@@ -18,7 +18,7 @@ public class Ball extends PortalObject {
      */
     public Ball(String imagefile, Group root, Brick[] b){
         super(imagefile, root);
-        xVel = Math.random()*100;
+        xVel = Math.random()*200-100;
         yVel = Math.sqrt(Math.pow(BALL_VELOCITY, 2) - Math.pow(xVel, 2));
         bricks = b;
         this.getImage().setFitWidth(50);
@@ -35,7 +35,6 @@ public class Ball extends PortalObject {
         this.setY(this.getY() + yVel * elapsedTime);
         if(this.getX() >= this.getScene().getWidth()-this.getImage().getBoundsInLocal().getWidth()){
             xVel *=-1;
-            this.changeImage("brick3.png");
         }
         if(this.getX() <= 0){
             xVel *=-1;
@@ -59,7 +58,9 @@ public class Ball extends PortalObject {
                 } else if (this.getImage().getBoundsInLocal().getCenterY() >= brick.getImage().getBoundsInLocal().getMaxY()) {
                     this.setYVel(Math.abs(this.getYVel()));
                 }
+                //this.getGroup().getChildren().get(brick.getImage()) = null;
                 this.getGroup().getChildren().remove(brick.getImage());
+
                 //array of bricks parameter
             }
         }
