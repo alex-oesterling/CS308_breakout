@@ -35,7 +35,7 @@ public class Main extends Application {
     private Scene myScene;
     private Ball ball;
     private Bumper bumper;
-    private Brick brick;
+    private Brick[] bricks;
     private Group root;
 
     @Override
@@ -56,7 +56,9 @@ public class Main extends Application {
     private void update(double elapsedTime) {
         ball.update(elapsedTime);
         bumper.update(elapsedTime);
-        brick.update(elapsedTime);
+        for(Brick b: bricks){
+            b.update(elapsedTime);
+        }
         //check collisions
         if(ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())){
             ball.setYVel(Math.abs(ball.getYVel())*-1);
@@ -66,40 +68,36 @@ public class Main extends Application {
             ball.setY(200);
             //root.getChildren().remove(ball.getImage());
         }
-        if(ball.getImage().getBoundsInLocal().intersects(brick.getImage().getBoundsInLocal())){
-            if(ball.getImage().getBoundsInLocal().getCenterX() <= brick.getImage().getBoundsInLocal().getMinX()){
-                ball.setXVel(Math.abs(ball.getXVel())*-1);
-            } else if(ball.getImage().getBoundsInLocal().getCenterX() >= brick.getImage().getBoundsInLocal().getMaxX()){
-                ball.setXVel(Math.abs(ball.getXVel()));
-            } else if(ball.getImage().getBoundsInLocal().getCenterY() <= brick.getImage().getBoundsInLocal().getMinY()){
-                ball.setYVel(Math.abs(ball.getYVel())*-1);
-            } else if(ball.getImage().getBoundsInLocal().getCenterY() >= brick.getImage().getBoundsInLocal().getMaxY()){
-                ball.setYVel(Math.abs(ball.getYVel()));
-            }
-            root.getChildren().remove(brick.getImage());
-            //array of bricks parameter
-        }
+
     }
 
     private Scene setupGame(int width, int height, Paint background) {
         root = new Group();
+        bricks = new Brick[20];
 
-        ball = new Ball(BOUNCER_IMAGE, root);
+        for(int i = 0; i < bricks.length; i++){
+            bricks[i] = new Brick(BOUNCER_IMAGE, root);
+            root.getChildren().add(bricks[i].getImage());
+        }
+
+        ball = new Ball(BOUNCER_IMAGE, root, bricks);
         bumper = new Bumper(BOUNCER_IMAGE, root);
-        brick = new Brick("brick.png", root);
+
 
         root.getChildren().add(ball.getImage());
         root.getChildren().add(bumper.getImage());
-        root.getChildren().add(brick.getImage());
+
 
         Scene scene = new Scene(root, width, height, background);
 
         ball.setScene(scene);
         bumper.setScene(scene);
-        brick.setScene(scene);
 
-        brick.setX(200);
-        brick.setY(200);
+        for(int i = 0; i < bricks.length; i++){
+            bricks[i].setScene(scene);
+            bricks[i].setX(i*50%400);
+            bricks[i].setY((i*50/400)*50);
+        }
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
         bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
         ball.setX(bumper.getImage().getX());
