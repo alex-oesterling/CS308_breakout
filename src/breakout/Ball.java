@@ -47,9 +47,9 @@ public class Ball extends PortalObject {
         for(int i = 0; i < bricks.size(); i++){
             if(checkIntersection(bricks.get(i))) {
                 bounceBrick(bricks.get(i));
+                bricks.get(i).collide(bricks);
                 if(bricks.get(i).damage() == 0){
-                    bricks.get(i).getGroup().getChildren().remove(bricks.get(i).getImage());
-                    bricks.remove(i);
+
                 }
             }
         }
