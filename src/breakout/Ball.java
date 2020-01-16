@@ -46,10 +46,15 @@ public class Ball extends PortalObject {
         }
         for(int i = 0; i < bricks.size(); i++){
             if(checkIntersection(bricks.get(i))) {
-                if(!(bricks.get(i) instanceof PortalBrick)){
+                //if(!(bricks.get(i) instanceof PortalBrick)){
                     bounceBrick(bricks.get(i));
+
+                System.out.println(this.getGroup().getChildren().size());
+                if(bricks.get(i) instanceof PortalBrick){
+                    bricks.get(i).collide(bricks);
+                } else {
+                    bricks.get(i).collide(bricks);
                 }
-                bricks.get(i).collide(bricks);
             }
         }
     }
