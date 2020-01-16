@@ -46,11 +46,10 @@ public class Ball extends PortalObject {
         }
         for(int i = 0; i < bricks.size(); i++){
             if(checkIntersection(bricks.get(i))) {
-                bounceBrick(bricks.get(i));
-                bricks.get(i).collide(bricks);
-                if(bricks.get(i).damage() == 0){
-
+                if(!(bricks.get(i) instanceof PortalBrick)){
+                    bounceBrick(bricks.get(i));
                 }
+                bricks.get(i).collide(bricks);
             }
         }
     }
@@ -72,6 +71,10 @@ public class Ball extends PortalObject {
         } else if (this.getImage().getBoundsInLocal().getCenterY() >= brick.getImage().getBoundsInLocal().getMaxY()) {
             this.setYVel(Math.abs(this.getYVel()));
         }
+    }
+
+    public void updateBricks(List<Brick> b){
+        bricks = b;
     }
 
     public double getXVel(){return xVel;}

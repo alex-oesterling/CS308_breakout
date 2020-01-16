@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
+import java.util.List;
+
 public class Bumper extends PortalObject {
     private static final int VELOCITY = 5;
 

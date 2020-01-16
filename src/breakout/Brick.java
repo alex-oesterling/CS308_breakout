@@ -44,9 +44,7 @@ public abstract class Brick extends PortalObject {
         }
          */
     }
-    public int damage(){
-        return(health--);
-    }
+    public int damage(){return 0;}
     public abstract void collide(List<Brick> b);
     public int getHealth(){return health;}
     public void setHealth(int h){health = h;}
