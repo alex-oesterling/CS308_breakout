@@ -13,11 +13,13 @@ public abstract class Brick extends PortalObject {
     private double secondsElapsed;
     private int state;
     private int health;
+    private Ball ball;
 
-    public Brick (String imagefile, Group root){
+    public Brick (String imagefile, Group root, Ball a){
         super(imagefile, root);
         this.getImage().setFitHeight(50);
         this.getImage().setFitWidth(50);
+        ball = a;
     }
     @Override
     /**
@@ -48,4 +50,5 @@ public abstract class Brick extends PortalObject {
     public abstract void collide(List<Brick> b);
     public int getHealth(){return health;}
     public void setHealth(int h){health = h;}
+    public Ball getBall(){return ball;}
 }

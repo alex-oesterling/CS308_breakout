@@ -13,8 +13,7 @@ public class PortalBrick extends Brick{
     private List<Brick> exitList;
     private Ball ball;
     public PortalBrick(String imagefile, Group root, Ball a, Group b, List c) {
-        super(imagefile, root);
-        ball = a;
+        super(imagefile, root, a);
         exit = b;
         exitList = c;
         entry = this.getGroup();
@@ -35,6 +34,6 @@ public class PortalBrick extends Brick{
         this.setGroup(exit);
         list2.add(0, buttonimg);
         list2.add(0, ballimg);
-        ball.updateBricks(exitList);
+        this.getBall().updateBricks(exitList);
     }
 }

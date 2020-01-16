@@ -14,6 +14,8 @@ public class Ball extends PortalObject {
     private double xVel, yVel;
     private List<Brick> bricks;
     private String mode;
+    private boolean insideBricks;
+    private boolean destroyedBrick;
     /**
      * CLEAN UP
      * Constructor
@@ -27,6 +29,7 @@ public class Ball extends PortalObject {
         this.getImage().setFitWidth(20);
         this.getImage().setFitHeight(20);
         mode = "normal";
+        insideBricks = false;
     }
 
     /**
@@ -48,15 +51,16 @@ public class Ball extends PortalObject {
         }
         for(int i = 0; i < bricks.size(); i++){
             if(checkIntersection(bricks.get(i))) {
-                //if(!(bricks.get(i) instanceof PortalBrick)){
+                if(mode != "wrecking ball" || getDestroyedBrick()){
+                    if(!(bricks.get(i) instanceof PortalBrick)) {
+                        insideBricks = true;
+                    }
                     bounceBrick(bricks.get(i));
-
-                System.out.println(this.getGroup().getChildren().size());
-                if(bricks.get(i) instanceof PortalBrick){
-                    bricks.get(i).collide(bricks);
-                } else {
-                    bricks.get(i).collide(bricks);
                 }
+                bricks.get(i).collide(bricks);
+
+            } else if(insideBricks && !checkIntersection(bricks.get(i))){
+                insideBricks = false;
             }
         }
     }
@@ -83,6 +87,19 @@ public class Ball extends PortalObject {
     public void updateBricks(List<Brick> b){
         bricks = b;
     }
+
+    public void setMode(String s){
+        mode = s;
+        if(s == "fireball"){
+            this.changeImage("portal1.png");
+        } else if(s == "wrecking ball"){
+            this.changeImage("portal2.png");
+        }
+    }
+    public String getMode(){return mode;}
+
+    public boolean getDestroyedBrick(){return destroyedBrick;}
+    public void setDestroyedBrick(boolean a){destroyedBrick = a;}
 
     public double getXVel(){return xVel;}
     public double getYVel(){return yVel;}

@@ -33,7 +33,7 @@ public class Main extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final String BOUNCER_IMAGE = "ball.png";
-    public static final int NUM_BRICKS = 5;
+    public static final int NUM_BRICKS = 20;
 
     private Scene myScene;
     private Ball ball;
@@ -87,12 +87,13 @@ public class Main extends Application {
         bricks = new ArrayList<Brick>();
         bricks2 = new ArrayList<Brick>();
         ball = new Ball(BOUNCER_IMAGE, roots.get(0), bricks);
+        ball.setMode("fireball");
         bumper = new Bumper(BOUNCER_IMAGE, roots.get(0));
 
         roots.get(0).getChildren().add(ball.getImage());
         roots.get(0).getChildren().add(bumper.getImage());
         for(int i = 0; i < NUM_BRICKS; i++){
-            bricks.add(new DuraBrick("brick.png", roots.get(0)));
+            bricks.add(new DuraBrick("brick.png", roots.get(0), ball));
             roots.get(0).getChildren().add(bricks.get(i).getImage());
         }
         bricks.add(0, new PortalBrick("portal1.png", roots.get(0), ball, roots.get(1), bricks2));
