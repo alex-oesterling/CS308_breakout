@@ -13,6 +13,7 @@ public class Ball extends PortalObject {
     public static final int BALL_VELOCITY = 200;
     private double xVel, yVel;
     private List<Brick> bricks;
+    private String mode;
     /**
      * CLEAN UP
      * Constructor
@@ -23,8 +24,9 @@ public class Ball extends PortalObject {
         xVel = Math.random()*400-200;
         yVel = Math.sqrt(Math.pow(BALL_VELOCITY, 2) - Math.pow(xVel, 2));
         bricks = b;
-        this.getImage().setFitWidth(50);
-        this.getImage().setFitHeight(50);
+        this.getImage().setFitWidth(20);
+        this.getImage().setFitHeight(20);
+        mode = "normal";
     }
 
     /**

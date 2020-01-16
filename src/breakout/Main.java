@@ -95,8 +95,8 @@ public class Main extends Application {
             bricks.add(new DuraBrick("brick.png", roots.get(0)));
             roots.get(0).getChildren().add(bricks.get(i).getImage());
         }
-        bricks.add(0, new PortalBrick("brick.png", roots.get(0), ball, roots.get(1), bricks2));
-        bricks2.add(0, new PortalBrick("brick.png", roots.get(1), ball,  roots.get(0), bricks));
+        bricks.add(0, new PortalBrick("portal1.png", roots.get(0), ball, roots.get(1), bricks2));
+        bricks2.add(0, new PortalBrick("portal2.png", roots.get(1), ball,  roots.get(0), bricks));
 
         roots.get(0).getChildren().add(bricks.get(0).getImage());
         roots.get(1).getChildren().add(bricks2.get(0).getImage());
