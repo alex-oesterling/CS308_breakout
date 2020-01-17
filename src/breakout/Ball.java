@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class Ball extends PortalObject {
     private String mode;
     private boolean insideBricks;
     private boolean destroyedBrick;
+    private boolean launched;
     /**
      * CLEAN UP
      * Constructor
@@ -23,6 +25,7 @@ public class Ball extends PortalObject {
      */
     public Ball(String imagefile, Group root, List b){
         super(imagefile, root);
+
         xVel = Math.random()*400-200;
         yVel = Math.sqrt(Math.pow(BALL_VELOCITY, 2) - Math.pow(xVel, 2));
         bricks = b;
@@ -30,6 +33,8 @@ public class Ball extends PortalObject {
         this.getImage().setFitHeight(20);
         mode = "normal";
         insideBricks = false;
+        launched = false;
+
     }
 
     /**
@@ -38,32 +43,46 @@ public class Ball extends PortalObject {
      */
     @Override
     public void update(double elapsedTime) {
-        this.setX(this.getX() + xVel * elapsedTime);
-        this.setY(this.getY() + yVel * elapsedTime);
-        if(this.getX() >= this.getScene().getWidth()-this.getImage().getBoundsInLocal().getWidth()){
-            xVel *=-1;
-        }
-        if(this.getX() <= 0){
-            xVel *=-1;
-        }
-        if(this.getY() <= 0){
-            yVel *=-1;
-        }
-        for(int i = 0; i < bricks.size(); i++){
-            if(checkIntersection(bricks.get(i))) {
-                if(mode != "wrecking ball" || getDestroyedBrick()){
-                    if(!(bricks.get(i) instanceof PortalBrick)) {
-                        insideBricks = true;
-                    }
-                    bounceBrick(bricks.get(i));
-                }
-                bricks.get(i).collide(bricks);
 
-            } else if(insideBricks && !checkIntersection(bricks.get(i))){
-                insideBricks = false;
+        if(launched) {
+            this.setX(this.getX() + xVel * elapsedTime);
+            this.setY(this.getY() + yVel * elapsedTime);
+            if (this.getX() >= this.getScene().getWidth() - this.getImage().getBoundsInLocal().getWidth()) {
+                xVel *= -1;
             }
+            if (this.getX() <= 0) {
+                xVel *= -1;
+            }
+            if (this.getY() <= 0) {
+                yVel *= -1;
+            }
+            for (int i = 0; i < bricks.size(); i++) {
+                if (checkIntersection(bricks.get(i))) {
+                    if (mode != "wrecking ball" || getDestroyedBrick()) {
+                        if (!(bricks.get(i) instanceof PortalBrick)) {
+                            insideBricks = true;
+                        }
+                        bounceBrick(bricks.get(i));
+                    }
+                    bricks.get(i).collide(bricks);
+
+                } else if (insideBricks && !checkIntersection(bricks.get(i))) {
+                    insideBricks = false;
+                }
+            }
+        } else {
+            this.setX(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX());
+            this.setY(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterY()-30);
         }
     }
+
+    public void ballKeyInput(KeyCode code) {
+        if(code == KeyCode.SPACE || code == KeyCode.W){
+            launched = true;
+        }
+        System.out.println("yeet");
+    }
+
     public boolean checkIntersection(Brick brick){
         Bounds bounds = this.getImage().getBoundsInLocal();
         return(brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX()+bounds.getWidth()/2, bounds.getCenterY(), 1, 1)

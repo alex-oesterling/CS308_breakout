@@ -4,12 +4,16 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -41,10 +45,16 @@ public class Main extends Application {
     private List<Brick> bricks;
     private List<Brick> bricks2;
     private List<Group> roots;
+    private Stage myStage;
+    private boolean gameStart;
+    private boolean gameOver;
 
     @Override
     public void start(Stage stage) throws Exception {
-        myScene = setupGame(SIZE, SIZE, BACKGROUND);
+        myScene = mainMenu();
+        myStage = stage;
+        gameStart = false;
+        gameOver = false;
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -57,30 +67,31 @@ public class Main extends Application {
     }
 
     private void update(double elapsedTime) {
-        ball.update(elapsedTime);
-        bumper.update(elapsedTime);
-        for(Brick b: bricks){
-            b.update(elapsedTime);
-        }
-        //check collisions
-        if(ball.getYVel()>=0 && ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())){
-            double degree = Math.abs(ball.getImage().getBoundsInLocal().getCenterX() - bumper.getImage().getBoundsInLocal().getCenterX())/(bumper.getImage().getBoundsInLocal().getWidth()/2);
-            degree = Math.toRadians(90*degree);
-            ball.setYVel(Math.abs(Math.cos(degree)*Ball.BALL_VELOCITY)*-1);
-            if(ball.getImage().getBoundsInLocal().getCenterX() < bumper.getImage().getBoundsInLocal().getCenterX()){
-                ball.setXVel(Math.abs(Math.sin(degree)*Ball.BALL_VELOCITY)*-1);
-            }
-            else if(ball.getImage().getBoundsInLocal().getCenterX() > bumper.getImage().getBoundsInLocal().getCenterX()) {
-                ball.setXVel(Math.abs(Math.sin(degree) * Ball.BALL_VELOCITY));
-            }
-        }
-        if(ball.getY() >= ball.getScene().getHeight()){
-            ball.setY(200);
-        }
+        if(gameStart) {
+            ball.update(elapsedTime);
+            bumper.update(elapsedTime);
 
+            for (Brick b : bricks) {
+                b.update(elapsedTime);
+            }
+            //check collisions
+            if (ball.getYVel() >= 0 && ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())) {
+                double degree = Math.abs(ball.getImage().getBoundsInLocal().getCenterX() - bumper.getImage().getBoundsInLocal().getCenterX()) / (bumper.getImage().getBoundsInLocal().getWidth() / 2);
+                degree = Math.toRadians(90 * degree);
+                ball.setYVel(Math.abs(Math.cos(degree) * Ball.BALL_VELOCITY) * -1);
+                if (ball.getImage().getBoundsInLocal().getCenterX() < bumper.getImage().getBoundsInLocal().getCenterX()) {
+                    ball.setXVel(Math.abs(Math.sin(degree) * Ball.BALL_VELOCITY) * -1);
+                } else if (ball.getImage().getBoundsInLocal().getCenterX() > bumper.getImage().getBoundsInLocal().getCenterX()) {
+                    ball.setXVel(Math.abs(Math.sin(degree) * Ball.BALL_VELOCITY));
+                }
+            }
+            if (ball.getY() >= ball.getScene().getHeight()) {
+                gameOver = true;
+            }
+        }
     }
 
-    private Scene setupGame(int width, int height, Paint background) {
+    private Scene setupGame() {
         roots = new ArrayList<Group>();
         roots.add(new Group());
         roots.add(1, new Group());
@@ -89,6 +100,7 @@ public class Main extends Application {
         ball = new Ball(BOUNCER_IMAGE, roots.get(0), bricks);
         ball.setMode("fireball");
         bumper = new Bumper(BOUNCER_IMAGE, roots.get(0));
+
 
         roots.get(0).getChildren().add(ball.getImage());
         roots.get(0).getChildren().add(bumper.getImage());
@@ -102,8 +114,11 @@ public class Main extends Application {
         roots.get(0).getChildren().add(bricks.get(0).getImage());
         roots.get(1).getChildren().add(bricks2.get(0).getImage());
 
-        Scene scene = new Scene(roots.get(0), width, height, background);
-
+        Scene scene = new Scene(roots.get(0), SIZE, SIZE, BACKGROUND);
+        scene.setOnKeyPressed(e -> {
+            ball.ballKeyInput(e.getCode());
+            bumper.bumperKeyInput(e.getCode());
+        });
         ball.setScene(scene);
         bumper.setScene(scene);
 
@@ -126,7 +141,20 @@ public class Main extends Application {
         return scene;
     }
 
-
+    public Scene mainMenu(){
+        Button start = new Button("Start Game");
+        start.setOnAction(e -> {
+            myStage.setScene(setupGame());
+            gameStart = true;
+        });
+        GridPane gridPane = new GridPane();
+        gridPane.setMinSize(200, 300);
+        gridPane.setPadding(new Insets(10, 10, 10, 10));
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.add(start, 0, 0);
+        Scene scene = new Scene(gridPane, SIZE, SIZE, BACKGROUND);
+        return scene;
+    }
 
     public static void main (String[] args) {
         launch(args);

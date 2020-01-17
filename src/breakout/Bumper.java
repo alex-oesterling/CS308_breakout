@@ -21,11 +21,10 @@ public class Bumper extends PortalObject {
 
 
     @Override
-    public void update(double elapsedTime) {
-       this.getScene().setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+    public void update(double elapsedTime) {return;
     }
 
-    private void handleKeyInput(KeyCode code) {
+    public void bumperKeyInput(KeyCode code) {
         //avoid "jittering" by preventing the move in the first place
         if(this.getImage().getX() < this.getScene().getWidth()-this.getImage().getBoundsInLocal().getWidth() && (code == KeyCode.RIGHT || code == KeyCode.D)){
             this.setX(this.getImage().getX() + VELOCITY);
