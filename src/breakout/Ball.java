@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Text;
 
 import java.util.List;
 
@@ -28,9 +29,8 @@ public class Ball extends PortalObject {
      */
     public Ball(String imagefile, Group root, List b){
         super(imagefile, root);
-
-        xVel = Math.random()*400-400;
-        yVel = Math.sqrt(Math.pow(BALL_VELOCITY, 2) - Math.pow(xVel, 2));
+        xVel = Math.cos(Math.random()*Math.PI)*BALL_VELOCITY;
+        yVel = Math.sin(Math.random()*Math.PI)*BALL_VELOCITY;
         bricks = b;
         this.getImage().setFitWidth(20);
         this.getImage().setFitHeight(20);
@@ -62,20 +62,23 @@ public class Ball extends PortalObject {
             }
             if(this.getY() >= this.getScene().getHeight()){
                 launched = false;
+                System.out.println("OOF");
                 lives--;
             }
             for (int i = 0; i < bricks.size(); i++) {
                 if (checkIntersection(bricks.get(i)) && bricks.get(i) != inside) {
+                    boolean notportal = !(bricks.get(i) instanceof PortalBrick);
+                    Brick b = bricks.get(i);
                     if (!insideBricks) {
                         insideBricks = true;
                         //possible remove?
-                        inside = bricks.get(i);
-                        bricks.get(i).collide(bricks);
+                        inside = b;
+                        b.collide(bricks);
                     }
-                    if ((mode != "wrecking ball" && !(bricks.get(i) instanceof PortalBrick)) || destroyedBrick == false) {
-                        bounceBrick(bricks.get(i));
+                    if ((mode != "wrecking ball" && (notportal)) || destroyedBrick == false) {
+                        bounceBrick(b);
                     }
-                    if(destroyedBrick){score++;}
+                    if(destroyedBrick && notportal){score++;}
                     destroyedBrick = false;
                 } else if(!checkIntersection(bricks.get(i))){
                     insideBricks = false;
@@ -83,17 +86,27 @@ public class Ball extends PortalObject {
                 }
             }
         } else {
-            Node essentials = this.getGroup().getChildren().get(0);
-            if(essentials instanceof Group){
-                this.setX(((Group)essentials).getChildren().get(1).getBoundsInLocal().getCenterX());
-                this.setY(((Group)essentials).getChildren().get(1).getBoundsInLocal().getCenterY() -30);
+            if(this.getGroup().getChildren().get(0) instanceof Group){
+                super.setX(((Group)this.getGroup().getChildren().get(0)).getChildren().get(1).getBoundsInLocal().getCenterX());
+                super.setY(((Group)this.getGroup().getChildren().get(0)).getChildren().get(1).getBoundsInLocal().getCenterY() -30);
+            }
+        }
+        if(this.getGroup().getChildren().get(0) instanceof Group) {
+            Group essentials = (Group)this.getGroup().getChildren().get(0);
+            if (essentials.getChildren().get(2) instanceof Text) {
+                ((Text) essentials.getChildren().get(2)).setText("Score: " + score);
             }
         }
     }
 
     public void ballKeyInput(KeyCode code) {
-        if(code == KeyCode.SPACE || code == KeyCode.W){
+        if((code == KeyCode.SPACE || code == KeyCode.W) && !launched){
             launched = true;
+            xVel = Math.cos(Math.random()*Math.PI)*BALL_VELOCITY;
+            yVel = Math.sin(Math.random()*Math.PI)*BALL_VELOCITY;
+        }
+        if(code == KeyCode.Q){
+            launched = false;
         }
     }
 

@@ -79,7 +79,6 @@ public class Main extends Application {
             for (Brick b : bricks) {
                 b.update(elapsedTime);
             }
-
             //check collisions
             if (ball.getYVel() >= 0 && ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())) {
                 double degree = Math.abs(ball.getImage().getBoundsInLocal().getCenterX() - bumper.getImage().getBoundsInLocal().getCenterX()) / (bumper.getImage().getBoundsInLocal().getWidth() / 2);
@@ -101,24 +100,31 @@ public class Main extends Application {
         bricks = new ArrayList<Brick>();
         bricks2 = new ArrayList<Brick>();
         ball = new Ball(BOUNCER_IMAGE, roots.get(0), bricks);
-        ball.setMode("wrecking ball");
+        ball.setMode("fireball");
         bumper = new Bumper(BOUNCER_IMAGE, roots.get(0));
         essentials = new Group();
         Text score = new Text();
+
         score.setText("" + ball.getScore());
         score.setFont(Font.font ("Verdana", 20));
         score.setFill(Color.RED);
+
+
 
         essentials.getChildren().add(ball.getImage());
         essentials.getChildren().add(bumper.getImage());
         essentials.getChildren().add(score);
         roots.get(0).getChildren().add(essentials);
-         /*
+
+
+        /*
         roots.get(0).getChildren().add(ball.getImage());
         roots.get(0).getChildren().add(bumper.getImage());
         roots.get(0).getChildren().add(score);
 
-          */
+         */
+
+
         for(int i = 0; i < NUM_BRICKS; i++){
             bricks.add(new DuraBrick("brick.png", roots.get(0), ball));
             roots.get(0).getChildren().add(bricks.get(i).getImage());
@@ -136,8 +142,6 @@ public class Main extends Application {
         });
         ball.setScene(scene);
         bumper.setScene(scene);
-        score.setX(200);
-        score.setY(200);
         for(int i = 0; i < bricks.size(); i++){
             bricks.get(i).setScene(scene);
             bricks.get(i).setX(i*50%400);
@@ -149,6 +153,8 @@ public class Main extends Application {
         bricks.get(0).setY(200);
         bricks2.get(0).setX(300);
         bricks2.get(0).setY(200);
+        score.setX(myScene.getWidth()-score.getLayoutBounds().getWidth());
+        score.setY(myScene.getHeight()-score.getLayoutBounds().getHeight());
 
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
         bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());

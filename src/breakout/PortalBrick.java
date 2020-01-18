@@ -26,12 +26,10 @@ public class PortalBrick extends Brick{
     @Override
     public void collide(List<Brick> b) {
         this.getBall().setDestroyedBrick(true);
-        ObservableList<Node> list = entry.getChildren();
-        ObservableList<Node> list2 = exit.getChildren();
-        Node essentials = list.get(0);
-        list.remove(0);
-        this.setGroup(exit);
-        list2.add(0, essentials);
+        Node essentials = entry.getChildren().get(0);
+        entry.getChildren().remove(0);
+        exit.getChildren().add(0, essentials);
+        this.getBall().setGroup(exit);
         this.getBall().updateBricks(exitList);
     }
 }
