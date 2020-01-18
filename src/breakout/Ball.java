@@ -19,6 +19,8 @@ public class Ball extends PortalObject {
     private boolean destroyedBrick;
     private boolean launched;
     private Brick inside;
+    private int score;
+    private int lives;
     /**
      * CLEAN UP
      * Constructor
@@ -27,7 +29,7 @@ public class Ball extends PortalObject {
     public Ball(String imagefile, Group root, List b){
         super(imagefile, root);
 
-        xVel = Math.random()*400-200;
+        xVel = Math.random()*400-400;
         yVel = Math.sqrt(Math.pow(BALL_VELOCITY, 2) - Math.pow(xVel, 2));
         bricks = b;
         this.getImage().setFitWidth(20);
@@ -36,7 +38,8 @@ public class Ball extends PortalObject {
         insideBricks = false;
         launched = false;
         destroyedBrick = false;
-
+        score = 0;
+        lives = 3;
     }
 
     /**
@@ -45,7 +48,6 @@ public class Ball extends PortalObject {
      */
     @Override
     public void update(double elapsedTime) {
-
         if(launched) {
             this.setX(this.getX() + xVel * elapsedTime);
             this.setY(this.getY() + yVel * elapsedTime);
@@ -58,35 +60,34 @@ public class Ball extends PortalObject {
             if (this.getY() <= 0) {
                 yVel *= -1;
             }
+            if(this.getY() >= this.getScene().getHeight()){
+                launched = false;
+                lives--;
+            }
             for (int i = 0; i < bricks.size(); i++) {
                 if (checkIntersection(bricks.get(i)) && bricks.get(i) != inside) {
                     if (!insideBricks) {
                         insideBricks = true;
+                        //possible remove?
                         inside = bricks.get(i);
                         bricks.get(i).collide(bricks);
-                        System.out.println(inside);
                     }
                     if ((mode != "wrecking ball" && !(bricks.get(i) instanceof PortalBrick)) || destroyedBrick == false) {
                         bounceBrick(bricks.get(i));
                     }
+                    if(destroyedBrick){score++;}
                     destroyedBrick = false;
                 } else if(!checkIntersection(bricks.get(i))){
                     insideBricks = false;
                     inside = null;
-
-
-                    /*
-                    if(!(bricks.get(i) instanceof PortalBrick)) {
-                        bounceBrick(bricks.get(i));
-                    }
-                    bricks.get(i).collide(bricks);
-
-                     */
                 }
             }
         } else {
-            this.setX(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX());
-            this.setY(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterY()-30);
+            Node essentials = this.getGroup().getChildren().get(0);
+            if(essentials instanceof Group){
+                this.setX(((Group)essentials).getChildren().get(1).getBoundsInLocal().getCenterX());
+                this.setY(((Group)essentials).getChildren().get(1).getBoundsInLocal().getCenterY() -30);
+            }
         }
     }
 
@@ -132,6 +133,9 @@ public class Ball extends PortalObject {
 
     public boolean getDestroyedBrick(){return destroyedBrick;}
     public void setDestroyedBrick(boolean a){destroyedBrick = a;}
+
+    public int getScore(){return score;}
+    public int getLives(){return lives;}
 
     public double getXVel(){return xVel;}
     public double getYVel(){return yVel;}

@@ -14,9 +14,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -42,12 +45,15 @@ public class Main extends Application {
     private Scene myScene;
     private Ball ball;
     private Bumper bumper;
-    private List<Brick> bricks;
+    private List<Brick> bricks; // make into list of lists?
     private List<Brick> bricks2;
     private List<Group> roots;
+    private Group essentials;
     private Stage myStage;
     private boolean gameStart;
     private boolean gameOver;
+    private int lives;
+    private int score;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -70,10 +76,10 @@ public class Main extends Application {
         if(gameStart) {
             ball.update(elapsedTime);
             bumper.update(elapsedTime);
-
             for (Brick b : bricks) {
                 b.update(elapsedTime);
             }
+
             //check collisions
             if (ball.getYVel() >= 0 && ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())) {
                 double degree = Math.abs(ball.getImage().getBoundsInLocal().getCenterX() - bumper.getImage().getBoundsInLocal().getCenterX()) / (bumper.getImage().getBoundsInLocal().getWidth() / 2);
@@ -84,10 +90,6 @@ public class Main extends Application {
                 } else if (ball.getImage().getBoundsInLocal().getCenterX() > bumper.getImage().getBoundsInLocal().getCenterX()) {
                     ball.setXVel(Math.abs(Math.sin(degree) * Ball.BALL_VELOCITY));
                 }
-            }
-            if (ball.getY() >= ball.getScene().getHeight()) {
-                gameOver = true;
-                ball.setY(200);
             }
         }
     }
@@ -101,10 +103,22 @@ public class Main extends Application {
         ball = new Ball(BOUNCER_IMAGE, roots.get(0), bricks);
         ball.setMode("wrecking ball");
         bumper = new Bumper(BOUNCER_IMAGE, roots.get(0));
+        essentials = new Group();
+        Text score = new Text();
+        score.setText("" + ball.getScore());
+        score.setFont(Font.font ("Verdana", 20));
+        score.setFill(Color.RED);
 
-
+        essentials.getChildren().add(ball.getImage());
+        essentials.getChildren().add(bumper.getImage());
+        essentials.getChildren().add(score);
+        roots.get(0).getChildren().add(essentials);
+         /*
         roots.get(0).getChildren().add(ball.getImage());
         roots.get(0).getChildren().add(bumper.getImage());
+        roots.get(0).getChildren().add(score);
+
+          */
         for(int i = 0; i < NUM_BRICKS; i++){
             bricks.add(new DuraBrick("brick.png", roots.get(0), ball));
             roots.get(0).getChildren().add(bricks.get(i).getImage());
@@ -122,7 +136,8 @@ public class Main extends Application {
         });
         ball.setScene(scene);
         bumper.setScene(scene);
-
+        score.setX(200);
+        score.setY(200);
         for(int i = 0; i < bricks.size(); i++){
             bricks.get(i).setScene(scene);
             bricks.get(i).setX(i*50%400);
@@ -132,7 +147,7 @@ public class Main extends Application {
         //temp
         bricks.get(0).setX(150);
         bricks.get(0).setY(200);
-        bricks2.get(0).setX(200);
+        bricks2.get(0).setX(300);
         bricks2.get(0).setY(200);
 
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
@@ -144,16 +159,20 @@ public class Main extends Application {
 
     public Scene mainMenu(){
         Button start = new Button("Start Game");
+        Text welcome = new Text("Welcome to PortalBreaker!\nUse the arrow keys (or wasd) to move. Press space to start.");
         start.setOnAction(e -> {
-            myStage.setScene(setupGame());
+            myScene = setupGame();
+            myStage.setScene(myScene);
             gameStart = true;
         });
-        GridPane gridPane = new GridPane();
-        gridPane.setMinSize(200, 300);
-        gridPane.setPadding(new Insets(10, 10, 10, 10));
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.add(start, 0, 0);
-        Scene scene = new Scene(gridPane, SIZE, SIZE, BACKGROUND);
+        StackPane pane = new StackPane();
+        pane.setMinSize(200, 300);
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.getChildren().add(start);
+        pane.setAlignment(start, Pos.BOTTOM_CENTER);
+        pane.getChildren().add(welcome);
+        pane.setAlignment(welcome, Pos.TOP_CENTER);
+        Scene scene = new Scene(pane, SIZE, SIZE, BACKGROUND);
         return scene;
     }
 

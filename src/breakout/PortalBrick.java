@@ -28,13 +28,10 @@ public class PortalBrick extends Brick{
         this.getBall().setDestroyedBrick(true);
         ObservableList<Node> list = entry.getChildren();
         ObservableList<Node> list2 = exit.getChildren();
-        Node ballimg = list.get(0);
-        Node buttonimg = list.get(1);
-        list.remove(0);
+        Node essentials = list.get(0);
         list.remove(0);
         this.setGroup(exit);
-        list2.add(0, buttonimg);
-        list2.add(0, ballimg);
+        list2.add(0, essentials);
         this.getBall().updateBricks(exitList);
     }
 }
