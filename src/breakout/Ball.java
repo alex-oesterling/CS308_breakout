@@ -18,6 +18,7 @@ public class Ball extends PortalObject {
     private boolean insideBricks;
     private boolean destroyedBrick;
     private boolean launched;
+    private Brick inside;
     /**
      * CLEAN UP
      * Constructor
@@ -34,6 +35,7 @@ public class Ball extends PortalObject {
         mode = "normal";
         insideBricks = false;
         launched = false;
+        destroyedBrick = false;
 
     }
 
@@ -57,17 +59,29 @@ public class Ball extends PortalObject {
                 yVel *= -1;
             }
             for (int i = 0; i < bricks.size(); i++) {
-                if (checkIntersection(bricks.get(i))) {
-                    if (mode != "wrecking ball" || getDestroyedBrick()) {
-                        if (!(bricks.get(i) instanceof PortalBrick)) {
-                            insideBricks = true;
-                        }
+                if (checkIntersection(bricks.get(i)) && bricks.get(i) != inside) {
+                    if (!insideBricks) {
+                        insideBricks = true;
+                        inside = bricks.get(i);
+                        bricks.get(i).collide(bricks);
+                        System.out.println(inside);
+                    }
+                    if ((mode != "wrecking ball" && !(bricks.get(i) instanceof PortalBrick)) || destroyedBrick == false) {
+                        bounceBrick(bricks.get(i));
+                    }
+                    destroyedBrick = false;
+                } else if(!checkIntersection(bricks.get(i))){
+                    insideBricks = false;
+                    inside = null;
+
+
+                    /*
+                    if(!(bricks.get(i) instanceof PortalBrick)) {
                         bounceBrick(bricks.get(i));
                     }
                     bricks.get(i).collide(bricks);
 
-                } else if (insideBricks && !checkIntersection(bricks.get(i))) {
-                    insideBricks = false;
+                     */
                 }
             }
         } else {
@@ -80,7 +94,6 @@ public class Ball extends PortalObject {
         if(code == KeyCode.SPACE || code == KeyCode.W){
             launched = true;
         }
-        System.out.println("yeet");
     }
 
     public boolean checkIntersection(Brick brick){

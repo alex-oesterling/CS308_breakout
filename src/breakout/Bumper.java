@@ -16,13 +16,10 @@ public class Bumper extends PortalObject {
 
         this.getImage().setFitHeight(20);
         this.getImage().setFitWidth(100);
-
     }
-
 
     @Override
-    public void update(double elapsedTime) {return;
-    }
+    public void update(double elapsedTime) {return; }
 
     public void bumperKeyInput(KeyCode code) {
         //avoid "jittering" by preventing the move in the first place

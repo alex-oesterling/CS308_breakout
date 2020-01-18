@@ -11,7 +11,7 @@ import java.util.List;
 public class PortalBrick extends Brick{
     private Group exit, entry;
     private List<Brick> exitList;
-    private Ball ball;
+
     public PortalBrick(String imagefile, Group root, Ball a, Group b, List c) {
         super(imagefile, root, a);
         exit = b;
@@ -25,6 +25,7 @@ public class PortalBrick extends Brick{
      */
     @Override
     public void collide(List<Brick> b) {
+        this.getBall().setDestroyedBrick(true);
         ObservableList<Node> list = entry.getChildren();
         ObservableList<Node> list2 = exit.getChildren();
         Node ballimg = list.get(0);

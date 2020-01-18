@@ -87,6 +87,7 @@ public class Main extends Application {
             }
             if (ball.getY() >= ball.getScene().getHeight()) {
                 gameOver = true;
+                ball.setY(200);
             }
         }
     }
@@ -98,7 +99,7 @@ public class Main extends Application {
         bricks = new ArrayList<Brick>();
         bricks2 = new ArrayList<Brick>();
         ball = new Ball(BOUNCER_IMAGE, roots.get(0), bricks);
-        ball.setMode("fireball");
+        ball.setMode("wrecking ball");
         bumper = new Bumper(BOUNCER_IMAGE, roots.get(0));
 
 
@@ -131,7 +132,7 @@ public class Main extends Application {
         //temp
         bricks.get(0).setX(150);
         bricks.get(0).setY(200);
-        bricks2.get(0).setX(150);
+        bricks2.get(0).setX(200);
         bricks2.get(0).setY(200);
 
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
