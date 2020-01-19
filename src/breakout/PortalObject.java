@@ -44,14 +44,15 @@ public abstract class PortalObject {
     public void setImage(ImageView a){myImage = a;}
 
     public Scene getScene(){return scene;}
-    public void setScene(Scene a){scene = a;}
+    public void setScene(Scene a){
+        scene = a;
+    }
 
     public Group getGroup(){return root;}
     public void setGroup(Group a){
         root=a;
     }
     public void setRoot(Group a){
-        setGroup(a);
         this.getScene().setRoot(a);
     }
 

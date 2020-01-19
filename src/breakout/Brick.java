@@ -26,26 +26,8 @@ public abstract class Brick extends PortalObject {
      * code duplication
      */
     public void update(double elapsedTime) {
-        secondsElapsed+=elapsedTime;
-        /*
-        if(secondsElapsed % 3 <= 0.01){
-            state++;
-            secondsElapsed=0;
-            if(state%4 == 1) {
-                this.changeImage("brick2.png");
-            }
-            if(state%4 == 2) {
-                this.changeImage("brick3.png");
-            }
-            if(state%4 == 3) {
-                this.changeImage("brick4.png");
-            }
-            if(state%4 == 0) {
-                this.changeImage("brick.png");
-            }
-        }
-         */
     }
+
     public int damage(){return 0;}
     public abstract void collide(List<Brick> b);
     public int getHealth(){return health;}

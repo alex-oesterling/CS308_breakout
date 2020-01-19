@@ -102,6 +102,8 @@ public class Main extends Application {
         essentials.getChildren().add(bumper.getImage());
         essentials.getChildren().add(score);
         essentials.getChildren().add(lives);
+        ball.setGroup(essentials);
+        bumper.setGroup(essentials);
         myScene = mainMenu();
     }
 
@@ -118,17 +120,6 @@ public class Main extends Application {
                             bricksLeft++;
                         }
                     }
-                }
-            }
-            //check collisions
-            if (ball.getYVel() >= 0 && ball.getImage().getBoundsInLocal().intersects(bumper.getImage().getBoundsInLocal())) {
-                double degree = Math.abs(ball.getImage().getBoundsInLocal().getCenterX() - bumper.getImage().getBoundsInLocal().getCenterX()) / (bumper.getImage().getBoundsInLocal().getWidth() / 2);
-                degree = Math.toRadians(90 * degree);
-                ball.setYVel(Math.abs(Math.cos(degree) * Ball.BALL_VELOCITY) * -1);
-                if (ball.getImage().getBoundsInLocal().getCenterX() < bumper.getImage().getBoundsInLocal().getCenterX()) {
-                    ball.setXVel(Math.abs(Math.sin(degree) * Ball.BALL_VELOCITY) * -1);
-                } else if (ball.getImage().getBoundsInLocal().getCenterX() > bumper.getImage().getBoundsInLocal().getCenterX()) {
-                    ball.setXVel(Math.abs(Math.sin(degree) * Ball.BALL_VELOCITY));
                 }
             }
             if(ball.getLives() <= 0){
@@ -160,8 +151,6 @@ public class Main extends Application {
         bricks2 = new ArrayList<Brick>();
          */
         ball.setLaunched(false);
-        ball.setGroup(roots.get(0));
-        bumper.setGroup(roots.get(0));
         ball.updateBricks(brickList.get(0));
         roots.get(0).getChildren().add(essentials);
 
@@ -249,7 +238,7 @@ public class Main extends Application {
                     entry = current;
                     entryXPos = 50*i;
                     entryYPos = 50*rownum;
-                } else if ((entry != -1 && entry != current) && c == '2'){
+                } else if ((entry != -1 && entry != current) && c == '2') {
                     exit = current;
                     PortalBrick entrancePortal = new PortalBrick("portal1.png", roots.get(entry), ball, roots.get(exit), brickList.get(exit));
                     temp = new PortalBrick("portal2.png", roots.get(exit), ball, roots.get(entry), brickList.get(entry));
@@ -259,6 +248,8 @@ public class Main extends Application {
                     entrancePortal.setGroup(roots.get(entry));
                     entrancePortal.setX(entryXPos);
                     entrancePortal.setY(entryYPos);
+                } else if (c == '3'){
+                    temp = new PowerBrick("brick.png", ball);
                 } else if (c == '/'){
                     current++;
                     brickList.add(new ArrayList<Brick>());

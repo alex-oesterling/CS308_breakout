@@ -64,6 +64,18 @@ public class Ball extends PortalObject {
                 lives--;
                 //mode = "normal";
             }
+
+            if (this.getYVel() >= 0 && this.getImage().getBoundsInLocal().intersects(this.getGroup().getChildren().get(1).getBoundsInLocal())) {
+                double degree = Math.abs(this.getImage().getBoundsInLocal().getCenterX() - this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()) / (this.getGroup().getChildren().get(1).getBoundsInLocal().getWidth() / 2);
+                degree = Math.toRadians(90 * degree);
+                this.setYVel(Math.abs(Math.cos(degree) * BALL_VELOCITY) * -1);
+                if (this.getImage().getBoundsInLocal().getCenterX() < this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()) {
+                    this.setXVel(Math.abs(Math.sin(degree) * BALL_VELOCITY) * -1);
+                } else if (this.getImage().getBoundsInLocal().getCenterX() > this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()) {
+                    this.setXVel(Math.abs(Math.sin(degree) * BALL_VELOCITY));
+                }
+            }
+
             for (int i = 0; i < bricks.size(); i++) {
                 if (checkIntersection(bricks.get(i)) && bricks.get(i) != inside) {
                     boolean notportal = !(bricks.get(i) instanceof PortalBrick);
@@ -85,21 +97,18 @@ public class Ball extends PortalObject {
                 }
             }
         } else {
-            if(this.getGroup().getChildren().get(0) instanceof Group){
-                super.setX(((Group)this.getGroup().getChildren().get(0)).getChildren().get(1).getBoundsInLocal().getCenterX()-this.getImage().getFitWidth()/2);
-                super.setY(((Group)this.getGroup().getChildren().get(0)).getChildren().get(1).getBoundsInLocal().getCenterY() -30);
-            }
+                super.setX(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()-this.getImage().getFitWidth()/2);
+                super.setY(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterY() -30);
         }
-        if(this.getGroup().getChildren().get(0) instanceof Group) {
-            Group essentials = (Group)this.getGroup().getChildren().get(0);
-            if (essentials.getChildren().get(2) instanceof Text) {
-                ((Text) essentials.getChildren().get(2)).setText("Score: " + score);
-                ((Text) essentials.getChildren().get(2)).setX(this.getScene().getWidth()-((Text) essentials.getChildren().get(2)).getLayoutBounds().getWidth());
+
+            if (this.getGroup().getChildren().get(2) instanceof Text) {
+                ((Text) this.getGroup().getChildren().get(2)).setText("Score: " + score);
+                ((Text) this.getGroup().getChildren().get(2)).setX(this.getScene().getWidth()-((Text) this.getGroup().getChildren().get(2)).getLayoutBounds().getWidth());
             }
-            if (essentials.getChildren().get(3) instanceof Text) {
-                ((Text) essentials.getChildren().get(3)).setText("Lives: " + lives);
+            if (this.getGroup().getChildren().get(3) instanceof Text) {
+                ((Text) this.getGroup().getChildren().get(3)).setText("Lives: " + lives);
             }
-        }
+
     }
 
     public void ballKeyInput(KeyCode code) {
