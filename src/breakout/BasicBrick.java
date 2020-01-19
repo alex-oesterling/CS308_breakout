@@ -5,8 +5,8 @@ import javafx.scene.Group;
 import java.util.List;
 
 public class BasicBrick extends Brick {
-    public BasicBrick(String imagefile, Group root, Ball a) {
-        super(imagefile, root, a);
+    public BasicBrick(String imagefile, Ball a) {
+        super(imagefile, a);
         this.setHealth(1);
     }
     @Override

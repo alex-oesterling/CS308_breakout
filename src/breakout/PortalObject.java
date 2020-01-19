@@ -19,9 +19,8 @@ public abstract class PortalObject {
     private Scene scene;
 
     public PortalObject(){}
-    public PortalObject(String imagefile, Group group){
+    public PortalObject(String imagefile){
         this.setImage(new ImageView(new Image(this.getClass().getClassLoader().getResourceAsStream(imagefile))));
-        root = group;
     }
     public double getX(){return x;}
     public double getY(){return y;}
@@ -50,6 +49,9 @@ public abstract class PortalObject {
     public Group getGroup(){return root;}
     public void setGroup(Group a){
         root=a;
+    }
+    public void setRoot(Group a){
+        setGroup(a);
         this.getScene().setRoot(a);
     }
 

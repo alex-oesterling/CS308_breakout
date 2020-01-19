@@ -11,8 +11,8 @@ import java.util.List;
 public class Bumper extends PortalObject {
     private static final int VELOCITY = 5;
 
-    public Bumper(String imagefile, Group root){
-        super(imagefile, root);
+    public Bumper(String imagefile){
+        super(imagefile);
 
         this.getImage().setFitHeight(20);
         this.getImage().setFitWidth(100);

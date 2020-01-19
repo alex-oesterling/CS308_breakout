@@ -8,8 +8,8 @@ import java.util.List;
  * List of groups or no?
  */
 public class DuraBrick extends Brick {
-    public DuraBrick(String imagefile, Group root, Ball a) {
-        super(imagefile, root, a);
+    public DuraBrick(String imagefile, Ball a) {
+        super(imagefile, a);
         this.setHealth(2);
     }
     @Override

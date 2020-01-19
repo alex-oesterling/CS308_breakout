@@ -27,11 +27,10 @@ public class Ball extends PortalObject {
      * Constructor
      * @param imagefile
      */
-    public Ball(String imagefile, Group root, List b){
-        super(imagefile, root);
+    public Ball(String imagefile){
+        super(imagefile);
         xVel = Math.cos(Math.random()*Math.PI)*BALL_VELOCITY;
         yVel = Math.sin(Math.random()*Math.PI)*BALL_VELOCITY;
-        bricks = b;
         this.getImage().setFitWidth(20);
         this.getImage().setFitHeight(20);
         mode = "normal";
@@ -62,8 +61,8 @@ public class Ball extends PortalObject {
             }
             if(this.getY() >= this.getScene().getHeight()){
                 launched = false;
-                System.out.println("OOF");
                 lives--;
+                //mode = "normal";
             }
             for (int i = 0; i < bricks.size(); i++) {
                 if (checkIntersection(bricks.get(i)) && bricks.get(i) != inside) {
@@ -87,7 +86,7 @@ public class Ball extends PortalObject {
             }
         } else {
             if(this.getGroup().getChildren().get(0) instanceof Group){
-                super.setX(((Group)this.getGroup().getChildren().get(0)).getChildren().get(1).getBoundsInLocal().getCenterX());
+                super.setX(((Group)this.getGroup().getChildren().get(0)).getChildren().get(1).getBoundsInLocal().getCenterX()-this.getImage().getFitWidth()/2);
                 super.setY(((Group)this.getGroup().getChildren().get(0)).getChildren().get(1).getBoundsInLocal().getCenterY() -30);
             }
         }
@@ -95,6 +94,10 @@ public class Ball extends PortalObject {
             Group essentials = (Group)this.getGroup().getChildren().get(0);
             if (essentials.getChildren().get(2) instanceof Text) {
                 ((Text) essentials.getChildren().get(2)).setText("Score: " + score);
+                ((Text) essentials.getChildren().get(2)).setX(this.getScene().getWidth()-((Text) essentials.getChildren().get(2)).getLayoutBounds().getWidth());
+            }
+            if (essentials.getChildren().get(3) instanceof Text) {
+                ((Text) essentials.getChildren().get(3)).setText("Lives: " + lives);
             }
         }
     }
@@ -105,8 +108,11 @@ public class Ball extends PortalObject {
             xVel = Math.cos(Math.random()*Math.PI)*BALL_VELOCITY;
             yVel = Math.sin(Math.random()*Math.PI)*BALL_VELOCITY;
         }
-        if(code == KeyCode.Q){
+        if(code == KeyCode.R){
             launched = false;
+        }
+        if(code == KeyCode.L){
+            lives++;
         }
     }
 
@@ -148,7 +154,11 @@ public class Ball extends PortalObject {
     public void setDestroyedBrick(boolean a){destroyedBrick = a;}
 
     public int getScore(){return score;}
+    public void setScore(int s){score = s;}
     public int getLives(){return lives;}
+    public void setLives(int l){lives = l;}
+
+    //public List getBricks(){return}
 
     public double getXVel(){return xVel;}
     public double getYVel(){return yVel;}

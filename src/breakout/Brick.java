@@ -15,8 +15,8 @@ public abstract class Brick extends PortalObject {
     private int health;
     private Ball ball;
 
-    public Brick (String imagefile, Group root, Ball a){
-        super(imagefile, root);
+    public Brick (String imagefile, Ball a){
+        super(imagefile);
         this.getImage().setFitHeight(50);
         this.getImage().setFitWidth(50);
         ball = a;
