@@ -158,7 +158,7 @@ public class Ball extends PortalObject {
     public int getLives(){return lives;}
     public void setLives(int l){lives = l;}
 
-    //public List getBricks(){return}
+    public void setLaunched(boolean s){launched = s;}
 
     public double getXVel(){return xVel;}
     public double getYVel(){return yVel;}
