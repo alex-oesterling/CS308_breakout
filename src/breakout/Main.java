@@ -3,22 +3,15 @@ package breakout;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -26,7 +19,6 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -62,10 +54,16 @@ public class Main extends Application {
     private int level;
     private String levelString;
 
+    /**
+     * Start method. Runs game loop after setting up stage and scene data.
+     * @param stage the window in which the game runs
+     * @throws Exception when game does not work
+     */
     @Override
     public void start(Stage stage) throws Exception {
         myStage = stage;
         initialize(stage);
+        setLevel(0);
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
@@ -78,15 +76,11 @@ public class Main extends Application {
     }
 
     /**
-     * update this. make it for setting mainmenu? or for resetting ball?
-     * @param stage
+     * Initializes necessary objects such as the ball, bumper, score, and lives which carry on throughout the game,
+     * as well as creating a subgroup for which these variables will stay in even as they transfer between stages and root groups.
+     * @param stage the stage in which the game takes place
      */
     private void initialize(Stage stage) {
-        level = 0;
-        levelString = "./resources/Level" + level + ".txt";
-        gameStart = false;
-        gameOver = false;
-
         ball = new Ball(BOUNCER_IMAGE);
         bumper = new Bumper(BOUNCER_IMAGE);
         essentials = new Group();
@@ -104,14 +98,19 @@ public class Main extends Application {
         essentials.getChildren().add(lives);
         ball.setGroup(essentials);
         bumper.setGroup(essentials);
-        myScene = mainMenu();
     }
 
+    /**
+     * The method that is constantly called in the game loop. Updates object positions, checks collisions,
+     * causes effects such as power ups or teleporting. This is where the magic happens.
+     * @param elapsedTime The time between calls of update (helps smooth motion)
+     */
     private void update(double elapsedTime) {
         if(gameStart && !gameOver) {
             int bricksLeft = 0;
             ball.update(elapsedTime);
             bumper.update(elapsedTime);
+            //pretty inefficient to keep counting the bricks over and over, could make a subtraction method in Ball class but I'd rather not.
             for (List list : brickList) {
                 for(Object b : list){
                     if(b instanceof Brick){
@@ -140,33 +139,23 @@ public class Main extends Application {
     }
 
 
-
-    private Scene setupGame(String filename) {
+    /**
+     * Sets up each individual level by loading a .txt file in and creating all the objects, groups, and other
+     * data structures for object management. Resets ball, bricks, and bumper and ties them to the new scene.
+     * @param filename the filename of the .txt file to construct the bricks from
+     * @return the new scene which the stage should display.
+     */
+    private Scene setLevel(String filename) {
         roots = new ArrayList<Group>();
         roots.add(new Group());
         brickList = new ArrayList<List>();
         brickList.add(new ArrayList<Brick>());
-        /*
-        bricks = new ArrayList<Brick>();
-        bricks2 = new ArrayList<Brick>();
-         */
+
         ball.setLaunched(false);
         ball.updateBricks(brickList.get(0));
         roots.get(0).getChildren().add(essentials);
 
         loadLevel(filename);
-        /*
-        for(int i = 0; i < NUM_BRICKS; i++){
-            bricks.add(new DuraBrick("brick.png", ball));
-            roots.get(0).getChildren().add(bricks.get(i).getImage());
-        }
-        bricks.add(0, new PortalBrick("portal1.png", roots.get(0), ball, roots.get(1), bricks2));
-        bricks2.add(0, new PortalBrick("portal2.png", roots.get(1), ball,  roots.get(0), bricks));
-
-        roots.get(0).getChildren().add(bricks.get(0).getImage());
-        roots.get(1).getChildren().add(bricks2.get(0).getImage());
-
-         */
 
         Scene scene = new Scene(roots.get(0), SIZE, SIZE, BACKGROUND);
         scene.setOnKeyPressed(e -> {
@@ -181,24 +170,8 @@ public class Main extends Application {
                 if(b instanceof Brick){
                     ((Brick) b).setScene(scene);
                 }
-                /*
-                bricks.get(i).setGroup(roots.get(0));
-                bricks.get(i).setScene(scene);
-                bricks.get(i).setX(i * 50 % 400);
-                bricks.get(i).setY((i * 50 / 400) * 50);
-
-                 */
             }
         }
-        /*
-        bricks2.get(0).setScene(scene);
-        //temp
-        bricks.get(0).setX(150);
-        bricks.get(0).setY(200);
-        bricks2.get(0).setX(300);
-        bricks2.get(0).setY(200);
-
-         */
         score.setX(myScene.getWidth()-score.getLayoutBounds().getWidth());
         score.setY(myScene.getHeight()-score.getLayoutBounds().getHeight());
         lives.setX(0);
@@ -206,11 +179,14 @@ public class Main extends Application {
 
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
         bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
-        ball.setX(bumper.getImage().getX());
-        ball.setY(bumper.getImage().getY()-100);
         return scene;
     }
 
+    /**
+     * Runs scanner to load .txt file and creates brick objects to put in the brick lists as well
+     * as positioning them in the scene
+     * @param filename the filename of the .txt file to construct the bricks from
+     */
     private void loadLevel(String filename) {
         try {
             scanner = new Scanner(new File(filename));
@@ -270,13 +246,29 @@ public class Main extends Application {
     }
 
     private void handleKeyInput(KeyCode code) {
-        if(code == KeyCode.DIGIT1){
-            setLevel(1);
+        if(code == KeyCode.DIGIT1 ||
+                code == KeyCode.DIGIT2 ||
+                code == KeyCode.DIGIT3 ||
+                code == KeyCode.DIGIT4 ||
+                code == KeyCode.DIGIT5 ||
+                code == KeyCode.DIGIT6 ||
+                code == KeyCode.DIGIT7 ||
+                code == KeyCode.DIGIT8 ||
+                code == KeyCode.DIGIT9 ||
+                code == KeyCode.DIGIT0){
+            setLevel(code.getCode()-48);
         }
     }
 
-    private void setLevel(int l) {
-        if(l == 0){
+    /**
+     * Sets myScene value to desired level number and sets the stage's scene to the desired level
+     * @param l - the level of the game desired. if 0, returns to the main menu
+     */
+    private void setLevel(int l) throws IllegalArgumentException{
+        if(l > LEVEL_NUM){
+            throw new IllegalArgumentException("Level higher than the number of levels:" + LEVEL_NUM);
+        }
+        else if(l == 0){
             myScene = mainMenu();
             myStage.setScene(myScene);
             gameStart = false;
@@ -284,13 +276,17 @@ public class Main extends Application {
         } else {
             level = l;
             levelString = "./resources/Level" + level + ".txt";
-            myScene = setupGame(levelString);
+            myScene = setLevel(levelString);
             myStage.setScene(myScene);
             gameStart = true;
             gameOver = false;
         }
     }
 
+    /**
+     * Creates the main menu scene, adding buttons with triggers to start the game
+     * @return the main menu scene to be displayed by the stage
+     */
     public Scene mainMenu(){
         Button start = new Button("Start Game");
         Text welcome = new Text("Welcome to PortalBreaker!\nUse the arrow keys (or wasd) to move. Press space to start.");
@@ -304,11 +300,19 @@ public class Main extends Application {
         pane.setAlignment(start, Pos.BOTTOM_CENTER);
         pane.getChildren().add(welcome);
         pane.setAlignment(welcome, Pos.TOP_CENTER);
-
         Scene scene = new Scene(pane, SIZE, SIZE, BACKGROUND);
+        scene.setOnKeyPressed(e -> {
+            handleKeyInput(e.getCode());
+        });
         return scene;
     }
 
+    /**
+     * Constructs the final scene to be displayed when the game ends,
+     * adding buttons to restart the game or return to the main menu.
+     * @param win - a boolean, which changes the text of the final screen depending on if the player won or lost
+     * @return the end game scene to be displayed by the stage
+     */
     private Scene endGame(boolean win){
         Button restart = new Button("Restart");
         Button menu = new Button("Main Menu");
@@ -334,11 +338,17 @@ public class Main extends Application {
         pane2.setAlignment(menu, Pos.TOP_CENTER);
         pane2.getChildren().add(message);
         pane2.setAlignment(message, Pos.CENTER);
-
         Scene scene = new Scene(pane2, SIZE, SIZE, BACKGROUND);
+        scene.setOnKeyPressed(e -> {
+            handleKeyInput(e.getCode());
+        });
         return scene;
     }
 
+    /**
+     * the main method. runs the game.
+     * @param args
+     */
     public static void main (String[] args) {
         launch(args);
     }
