@@ -1,6 +1,7 @@
 package breakout;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.text.Text;
 
 /**
  * The bumper class which is controlled by the arrow keys and bounces the ball
@@ -24,7 +25,9 @@ public class Bumper extends PortalObject {
      * @param elapsedTime - the time between calls of update (to smooth motion with varying timesteps)
      */
     @Override
-    public void update(double elapsedTime) {return;}
+    public void update(double elapsedTime) {
+        return;
+    }
 
     /**
      * Key input function, moves the bumper when certain keyboard keys are pressed

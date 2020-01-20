@@ -40,6 +40,7 @@ public class Main extends Application {
     public static final String BASIC_BRICK_IMAGE = "basic_brick.png";
     public static final String DURA_BRICK_IMAGE = "dura_brick.png";
     public static final String BUMPER_IMAGE = "paddle.gif";
+    public static final String HEALTH_BRICK_IMAGE = "health.png";
     public static final int LEVEL_NUM = 3;
 
     private Scene myScene;
@@ -53,6 +54,7 @@ public class Main extends Application {
     private boolean gameOver;
     private Text lives;
     private Text score;
+    private Text levelText;
     private Scanner scanner;
     private int level;
     private String levelString;
@@ -89,6 +91,10 @@ public class Main extends Application {
         essentials = new Group();
         score = new Text();
         lives = new Text();
+        levelText = new Text();
+        levelText.setText(""+level);
+        levelText.setFont(Font.font ("Verdana", 16));
+        levelText.setFill(Color.RED);
         score.setText("" + ball.getScore());
         score.setFont(Font.font ("Verdana", 20));
         score.setFill(Color.RED);
@@ -99,6 +105,7 @@ public class Main extends Application {
         essentials.getChildren().add(bumper.getImage());
         essentials.getChildren().add(score);
         essentials.getChildren().add(lives);
+        essentials.getChildren().add(levelText);
         ball.setGroup(essentials);
         bumper.setGroup(essentials);
     }
@@ -124,13 +131,16 @@ public class Main extends Application {
                     }
                 }
             }
+            levelText.setText("Level " + level);
+            levelText.setX(bumper.getImage().getBoundsInLocal().getCenterX()-levelText.getLayoutBounds().getWidth()/2);
             if(ball.getLives() <= 0){
                 gameOver = true;
                 myScene = endGame(false);
                 myStage.setScene(myScene);
             }
-            if(bricksLeft == 0){ //fix this shit
-                if(level == LEVEL_NUM) {
+            if(bricksLeft == 0){
+                System.out.println(level);
+                if(level > LEVEL_NUM) {
                     gameOver = true;
                     myScene = endGame(true);
                     myStage.setScene(myScene);
@@ -181,6 +191,7 @@ public class Main extends Application {
         score.setY(myScene.getHeight()-score.getLayoutBounds().getHeight());
         lives.setX(0);
         lives.setY(myScene.getHeight()-lives.getLayoutBounds().getHeight());
+        levelText.setY(myScene.getHeight()-4);
 
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
         bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
@@ -229,8 +240,10 @@ public class Main extends Application {
                     entrancePortal.setGroup(roots.get(entry));
                     entrancePortal.setX(entryXPos);
                     entrancePortal.setY(entryYPos);
-                } else if (c == '3'){
+                } else if (c == '3') {
                     temp = new PowerBrick(BASIC_BRICK_IMAGE, ball);
+                } else if (c == '4'){
+                    temp = new HealthBrick(HEALTH_BRICK_IMAGE, ball);
                 } else if (c == '/'){
                     current++;
                     brickList.add(new ArrayList<Brick>());

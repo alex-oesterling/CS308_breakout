@@ -24,6 +24,7 @@ public class Ball extends PortalObject {
     private int lives;
     private boolean poweredUp;
     private double secondsElapsed;
+    private boolean toggle;
     private double mouseX;
     private double mouseY;
     /**
@@ -45,6 +46,7 @@ public class Ball extends PortalObject {
         lives = 3;
         poweredUp = false;
         secondsElapsed = 0.0;
+        toggle = false;
     }
 
     /**
@@ -161,6 +163,8 @@ public class Ball extends PortalObject {
                     }
                 }
                 inside = null;
+            } else if(checkIntersection(bricks.get(i))){
+                bricks.get(i).collide(bricks);
             }
         }
     }
@@ -183,7 +187,12 @@ public class Ball extends PortalObject {
             lives++;
         }
         if(code == KeyCode.S){
-            setMode("seeker");
+            toggle = !toggle;
+            if(toggle) {
+                setMode("seeker");
+            }else{
+                setMode("normal");
+            }
         }
     }
 
@@ -273,6 +282,12 @@ public class Ball extends PortalObject {
      * @return the current lives left in the game
      */
     public int getLives(){return lives;}
+
+    /**
+     * Sets the current lives left equal to the parameter
+     * @param a - the new life total for the game
+     */
+    public void setLives(int a){lives = a;}
 
     /**
      * Sets whether the ball has been launched by the paddle or not
