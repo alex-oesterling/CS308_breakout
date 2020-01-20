@@ -1,3 +1,4 @@
+
 package breakout;
 
 import javafx.animation.KeyFrame;
@@ -24,7 +25,11 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Feel free to completely change this code or delete it entirely. 
+ * Main class, runs application, sets up stage, general scene instantiation, and object instantiation.
+ * No assumptions made
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class Main extends Application {
     /**
@@ -307,7 +312,9 @@ public class Main extends Application {
      */
     public Scene mainMenu(){
         Button start = new Button("Start Game");
-        Text welcome = new Text("Welcome to PortalBreaker!\nUse the arrow keys (or wasd) to move. Press space to start.");
+        Text welcome = new Text("Welcome to PortalBreaker!\nUse the arrow keys (or wasd) to move. Press space to start." +
+                "\n\nFor testers: s toggles \"seeker\" mode,\nnumpad selects a level (0) for main,\nl adds lives and r resets ball" +
+                "\n\nHave fun playing with portals!!!");
         start.setOnAction(e -> {
             setLevel(1);
         });

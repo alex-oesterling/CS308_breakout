@@ -6,6 +6,10 @@ import java.util.List;
 
 /**
  * A 2 health version of the original Basic Brick class.
+ * It assumes there is a scene in which it can be placed.
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class DuraBrick extends Brick {
     /**

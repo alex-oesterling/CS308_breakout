@@ -3,9 +3,12 @@ package breakout;
 import javafx.scene.Group;
 
 import java.util.List;
-
 /**
  * The youngest child of the Brick class. A simple brick with 1 health.
+ * It assumes there is a scene in which it can be placed.
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class BasicBrick extends Brick {
     /**

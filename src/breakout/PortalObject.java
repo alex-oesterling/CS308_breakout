@@ -6,7 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * @author me
+ * PortalObject is an abstract class which all objects I instantiate in my game are created off of.
+ * It is used to help organize the instantiation of game components and access universal qualities
+ * such as having an ImageView to render
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public abstract class PortalObject {
     private double x, y;

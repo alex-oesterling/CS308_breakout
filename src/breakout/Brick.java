@@ -4,10 +4,14 @@ import java.util.List;
 
 /**
  * Abstract Brick class which allows me to put all the different types of bricks into one list
+ * It allows other objects to universally access the unique collision methods of
+ * different bricks.
+ * It assumes there is a scene in which it can be placed.
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public abstract class Brick extends PortalObject {
-    private double secondsElapsed;
-    private int state;
     private int health;
     private Ball ball;
 

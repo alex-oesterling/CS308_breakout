@@ -10,6 +10,10 @@ import java.util.List;
 /**
  * The ball class, contains most of the backend code. Controls ball motion and physics, triggers brick collisions,
  * and manages game stats of score and lives (which transfer between scenes with the ball)
+ * It assumes there is a scene in which it can be placed.
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class Ball extends PortalObject {
     public static final int BALL_VELOCITY = 200;

@@ -5,7 +5,12 @@ import javafx.scene.Group;
 import java.util.List;
 
 /**
- * A healing brick which gives you an additional life.
+ * The HealthBrick extends the abstract Brick class and is
+ * a gamepiece which will provide the player additional lives when destroyed
+ * It assumes there is a scene in which it can be placed.
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class HealthBrick extends Brick {
     /**

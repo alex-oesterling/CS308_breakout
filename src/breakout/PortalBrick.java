@@ -6,6 +6,12 @@ import java.util.List;
 
 /**
  * A complex brick which teleports the player to a different dimension (in the same level)
+ * More functionally it changes the root group which the scene is operating on
+ * It assumes there is a scene in which it can be placed, as well as a second group and list
+ * of bricks to "swap"
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class PortalBrick extends Brick{
     private Group exit, entry;

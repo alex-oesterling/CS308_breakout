@@ -1,10 +1,13 @@
 package breakout;
 
 import javafx.scene.input.KeyCode;
-import javafx.scene.text.Text;
 
 /**
- * The bumper class which is controlled by the arrow keys and bounces the ball
+ * The bumper class is used to create and control bumpers in the game.
+ * It assumes that there is a scene for it to be placed into
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class Bumper extends PortalObject {
     private static final int VELOCITY = 5;

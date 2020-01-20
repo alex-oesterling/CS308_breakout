@@ -4,6 +4,10 @@ import java.util.List;
 
 /**
  * A child of the Brick class. This brick provides powerups when destroyed.
+ * It assumes there is a scene in which it can be placed.
+ * It depends on the JavaFX library
+ * @author Alex Oesterling, axo
+ * @version 1/19/20
  */
 public class PowerBrick extends Brick{
     public static final String FIREBALL = "fireball.png";
