@@ -49,7 +49,7 @@ public class PowerBrick extends Brick{
             } else if (state == 1){
                 this.getBall().setMode("wrecking ball");
             } else if (state == 2){
-                this.getBall().setMode("fireball");
+                this.getBall().setMode("ghost");
             } else if (state == 3){
                 this.getBall().setMode("wrecking ball");
             }

@@ -155,7 +155,6 @@ public class Main extends Application {
         brickList.add(new ArrayList<Brick>());
 
         ball.setLaunched(false);
-        ball.setMode("ghost"); //FOR TESTING
         ball.updateBricks(brickList.get(0));
         roots.get(0).getChildren().add(essentials);
         loadLevel(filename);
@@ -165,6 +164,9 @@ public class Main extends Application {
             ball.ballKeyInput(e.getCode());
             bumper.bumperKeyInput(e.getCode());
             handleKeyInput(e.getCode());
+        });
+        scene.setOnMouseMoved(e ->{
+            ball.ballMouseTracker(e);
         });
         ball.setScene(scene);
         bumper.setScene(scene);

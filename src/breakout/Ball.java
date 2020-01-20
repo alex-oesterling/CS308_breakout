@@ -2,6 +2,7 @@ package breakout;
 
 import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public class Ball extends PortalObject {
     private int lives;
     private boolean poweredUp;
     private double secondsElapsed;
+    private double mouseX;
+    private double mouseY;
     /**
      * Constructor, sets ball velocity, mode, size, and sets the beginning score and lives.
      * @param imagefile - the filename for the image used to render the ball
@@ -76,7 +79,7 @@ public class Ball extends PortalObject {
     private void decayPowerUp(double elapsedTime) {
         if (poweredUp) {
             secondsElapsed += elapsedTime;
-            if (secondsElapsed > 3.0) {
+            if (secondsElapsed > 10.0) {
                 System.out.println("bop");
                 secondsElapsed = 0;
                 poweredUp = false;
@@ -92,14 +95,20 @@ public class Ball extends PortalObject {
     private void move(double elapsedTime) {
         this.setX(this.getX() + xVel * elapsedTime);
         this.setY(this.getY() + yVel * elapsedTime);
-        if (this.getX() >= this.getScene().getWidth() - this.getImage().getBoundsInLocal().getWidth()) {
-            xVel *= -1;
-        }
-        if (this.getX() <= 0) {
-            xVel *= -1;
-        }
-        if (this.getY() <= 0) {
-            yVel *= -1;
+        if(mode != "seeker") {
+            if (this.getX() >= this.getScene().getWidth() - this.getImage().getBoundsInLocal().getWidth()) {
+                xVel *= -1;
+            }
+            if (this.getX() <= 0) {
+                xVel *= -1;
+            }
+            if (this.getY() <= 0) {
+                yVel *= -1;
+            }
+        } else {
+            double angle = Math.atan2(mouseY-this.getY(), mouseX-this.getX());
+            xVel = Math.cos(angle)*BALL_VELOCITY;
+            yVel = Math.sin(angle)*BALL_VELOCITY;
         }
         if(this.getY() >= this.getScene().getHeight()){
             launched = false;
@@ -176,6 +185,15 @@ public class Ball extends PortalObject {
     }
 
     /**
+     * Handles mouse tracking for seeker mode on ball.
+     * @param e - the mouse input passed by EventHandler
+     */
+    public void ballMouseTracker(MouseEvent e){
+        mouseX = e.getSceneX();
+        mouseY = e.getSceneY();
+    }
+
+    /**
      * Checks the intersection of the ball with a brick
      * @param brick - a single brick object from the list of bricks in the stage
      * @return a boolean of whether or not the ball intersected the passed brick
@@ -222,11 +240,13 @@ public class Ball extends PortalObject {
         if(s == "normal"){
             this.changeImage("ball.png");
         }else if(s == "fireball"){
-            this.changeImage("portal1.png");
+            this.changeImage("fire_ball.png");
         } else if(s == "wrecking ball"){
-            this.changeImage("portal2.png");
+            this.changeImage("wrecking_ball.png");
         } else if(s == "ghost"){
-            this.changeImage("brick3.png");
+            this.changeImage("ghost_ball.png");
+        } else if(s == "seeker"){
+            this.changeImage("seeker_ball.png");
         }
     }
 
