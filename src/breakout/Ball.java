@@ -32,9 +32,9 @@ public class Ball extends PortalObject {
      */
     public Ball(String imagefile){
         super(imagefile);
-        xVel = Math.cos(Math.toRadians(Math.random()*Math.PI))*BALL_VELOCITY;
-        yVel = Math.sin(Math.toRadians(Math.random()*Math.PI))*BALL_VELOCITY*-1;
-        System.out.println(xVel + "\t" + yVel);
+        double angle = Math.random()*Math.PI*2-Math.PI;
+        xVel = Math.cos(angle)*BALL_VELOCITY;
+        yVel = Math.sin(angle)*BALL_VELOCITY*-1;
         this.getImage().setFitWidth(20);
         this.getImage().setFitHeight(20);
         mode = "normal";
@@ -80,7 +80,6 @@ public class Ball extends PortalObject {
         if (poweredUp) {
             secondsElapsed += elapsedTime;
             if (secondsElapsed > 10.0) {
-                System.out.println("bop");
                 secondsElapsed = 0;
                 poweredUp = false;
                 this.setMode("normal");
@@ -173,14 +172,18 @@ public class Ball extends PortalObject {
     public void ballKeyInput(KeyCode code) {
         if((code == KeyCode.SPACE || code == KeyCode.W) && !launched){
             launched = true;
-            xVel = Math.cos(Math.toRadians(Math.random()*Math.PI))*BALL_VELOCITY;
-            yVel = Math.sin(Math.toRadians(Math.random()*Math.PI))*BALL_VELOCITY;
+            double angle = Math.random()*Math.PI*2-Math.PI;
+            xVel = Math.cos(angle)*BALL_VELOCITY;
+            yVel = Math.sin(angle)*BALL_VELOCITY*-1;
         }
         if(code == KeyCode.R){
             launched = false;
         }
         if(code == KeyCode.L){
             lives++;
+        }
+        if(code == KeyCode.S){
+            setMode("seeker");
         }
     }
 

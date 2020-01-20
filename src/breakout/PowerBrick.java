@@ -9,6 +9,7 @@ public class PowerBrick extends Brick{
     public static final String FIREBALL = "fireball.png";
     public static final String WRECKINGBALL = "wreckingball.png";
     public static final String GHOST = "ghost.png";
+    public static final String SEEKER = "seeker.png";
     private int state;
     private String[] filenames;
 
@@ -21,7 +22,7 @@ public class PowerBrick extends Brick{
         super(imagefile, a);
         this.setHealth(1);
         state = (int) Math.round(Math.random()*3);
-        filenames = new String[]{FIREBALL, WRECKINGBALL, GHOST, "brick4.png"};
+        filenames = new String[]{FIREBALL, WRECKINGBALL, GHOST, SEEKER};
         this.changeImage(filenames[state]);
     }
 
@@ -51,7 +52,7 @@ public class PowerBrick extends Brick{
             } else if (state == 2){
                 this.getBall().setMode("ghost");
             } else if (state == 3){
-                this.getBall().setMode("wrecking ball");
+                this.getBall().setMode("seeker");
             }
             this.getGroup().getChildren().remove(this.getImage());
             b.remove(this);
