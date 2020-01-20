@@ -37,6 +37,9 @@ public class Main extends Application {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     public static final String BOUNCER_IMAGE = "ball.png";
+    public static final String BASIC_BRICK_IMAGE = "basic_brick.png";
+    public static final String DURA_BRICK_IMAGE = "dura_brick.png";
+    public static final String BUMPER_IMAGE = "paddle.gif";
     public static final int LEVEL_NUM = 3;
 
     private Scene myScene;
@@ -82,7 +85,7 @@ public class Main extends Application {
      */
     private void initialize(Stage stage) {
         ball = new Ball(BOUNCER_IMAGE);
-        bumper = new Bumper(BOUNCER_IMAGE);
+        bumper = new Bumper(BUMPER_IMAGE);
         essentials = new Group();
         score = new Text();
         lives = new Text();
@@ -145,16 +148,16 @@ public class Main extends Application {
      * @param filename the filename of the .txt file to construct the bricks from
      * @return the new scene which the stage should display.
      */
-    private Scene setLevel(String filename) {
+    private Scene setScene(String filename) {
         roots = new ArrayList<Group>();
         roots.add(new Group());
         brickList = new ArrayList<List>();
         brickList.add(new ArrayList<Brick>());
 
         ball.setLaunched(false);
+        ball.setMode("ghost"); //FOR TESTING
         ball.updateBricks(brickList.get(0));
         roots.get(0).getChildren().add(essentials);
-
         loadLevel(filename);
 
         Scene scene = new Scene(roots.get(0), SIZE, SIZE, BACKGROUND);
@@ -207,9 +210,9 @@ public class Main extends Application {
                 if(c == '-'){
                     continue;
                 } else if(c == '0'){
-                    temp = new BasicBrick("brick.png", ball);
+                    temp = new BasicBrick(BASIC_BRICK_IMAGE, ball);
                 } else if (c == '1'){
-                    temp = new DuraBrick("brick.png", ball);
+                    temp = new DuraBrick(DURA_BRICK_IMAGE, ball);
                 } else if (entry == -1 && c == '2'){
                     entry = current;
                     entryXPos = 50*i;
@@ -225,7 +228,7 @@ public class Main extends Application {
                     entrancePortal.setX(entryXPos);
                     entrancePortal.setY(entryYPos);
                 } else if (c == '3'){
-                    temp = new PowerBrick("brick.png", ball);
+                    temp = new PowerBrick(BASIC_BRICK_IMAGE, ball);
                 } else if (c == '/'){
                     current++;
                     brickList.add(new ArrayList<Brick>());
@@ -276,7 +279,7 @@ public class Main extends Application {
         } else {
             level = l;
             levelString = "./resources/Level" + level + ".txt";
-            myScene = setLevel(levelString);
+            myScene = setScene(levelString);
             myStage.setScene(myScene);
             gameStart = true;
             gameOver = false;
