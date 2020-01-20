@@ -313,7 +313,7 @@ public class Main extends Application {
     public Scene mainMenu(){
         Button start = new Button("Start Game");
         Text welcome = new Text("Welcome to PortalBreaker!\nUse the arrow keys (or wasd) to move. Press space to start." +
-                "\n\nFor testers: \'s\'toggles \"seeker\" mode,\nnumpad selects a level (0) for main,\n\'l\' adds lives and \'r\' resets ball" +
+                "\n\nFor testers: \'s\' toggles \"seeker\" mode,\nnumpad selects a level (0) for main,\n\'l\' adds lives and \'r\' resets ball" +
                 "\n\nHave fun playing with portals!!!");
         start.setOnAction(e -> {
             setLevel(1);
