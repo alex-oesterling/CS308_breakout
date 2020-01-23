@@ -15,7 +15,7 @@ Hours Spent:
 25-30
 ### Resources Used
 Google
-Stackexchange
+StackExchange
 TA's: Jack Proudfoot, Anna Darwish
 JavaFX Tutorial
 ### Running the Program
