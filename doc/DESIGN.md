@@ -33,16 +33,16 @@ of the objects in the game (ball, brick, bumper), and their instantiation. It ha
 calls to switch scenes, loading a level from a text file, and the logic controlling when 
 the game starts and when the game is over.
 
-The ball, bumper, and brick all extend the abstract PortalBrick parent which has an update() method,
+The ball, bumper, and brick all extend the abstract PortalBrick parent which has an ```update()``` method,
 an inherent ImageView object (which is rendered in main), and X and Y positions. They all
 pass their ImageViews into the main method to be rendered and added to a scene. 
 
 The ball class handles its own motion around the stage, bouncing off of walls and also checking
-collisions with the bumper and brick. It calls the collide() methods of each brick as it collides
+collisions with the bumper and brick. It calls the ```collide()``` methods of each brick as it collides
 with them, and also stores the lives and score values and updates them as it breaks bricks or falls 
 off the stage. 
 
-The brick class contains a collision() and damage() method, which tracks its own status,
+The brick class contains a ```collision()``` and ```damage()``` method, which tracks its own status,
 and triggers any and all effects when the ball collides with it. It then will damage
 itself and if its health becomes 0, it will remove itself from the list and scene.
 
@@ -74,3 +74,24 @@ between the brick and bumper, and my little knowledge of good coding would force
 pass the bumper as an additional object into the bumper leading to sharing of unnecessary 
 information and more dependent code.
 ### Describe how to add new features, especially ones not completed by deadline
+To add additional features to my project it depends on the type of feature one desires to add.
+* To add additional bricks to my project, simply create a new class and have it extend the abstract Brick.
+This implementation will allow a programmer to start creating new instances of the brick in the 
+main class by adding an additional case to the scanning level loader (ie add an if statement for a 
+new possible number to put in a level.txt file). This would require a simple modification to the 
+```loadlevel()``` method in the main class.
+* To add a other ball power-ups to my project, one would have to add an additional "case" to the ```setmode()``` 
+method in the ball case, adding an additional possible string representing the new mode as 
+well as a corresponding imagefile. Then, one would have to add code depending on how
+the powerup affects the game. For example, if it were another power up that changed the way
+the ball collided with the bricks, such as the wrecking ball power up, a coder would have to edit
+the ```update()``` method in the ball class to change how it bounced off of bricks or triggered
+collisions. If the ball would change how much damage it would do to the bricks, then one may
+have to alter the ```damage()``` method inherited by the brick classes.
+* To power up the bumper/paddle, one would have to add a lot more code because I did not develop
+my own way of powering up the paddle which could be extended by a new feature. It would be quite easy to
+have a ```setMode()``` method to allow the main game or another object to power it up, and then
+some sort of modification to its ```update()``` method to allow this "power up" to actually
+affect its interactions with the other objects in the game. For example, to make a wide paddle,
+the new ```setMode()``` method could change the ```getImage()``` ImageView object using ```setFitWidth()```
+.
