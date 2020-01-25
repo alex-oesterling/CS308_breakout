@@ -4,14 +4,11 @@ import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
-
 import java.util.List;
-
 /**
- * The ball class, contains most of the backend code. Controls ball motion and physics, triggers brick collisions,
- * and manages game stats of score and lives (which transfer between scenes with the ball)
- * It assumes there is a scene in which it can be placed.
- * It depends on the JavaFX library
+ * The ball class, contains most of the backend code. Controls ball motion and physics, triggers brick collisions, and manages game stats of score and lives (which transfer between scenes with the ball)
+ * This is well-designed because each method has one purpose: if multiple things are occuring in one method, they are extracted into single-function, descriptive methods (even if they make the code longer).
+ * For example, the update() method calls 5 different descriptive, single-function methods to move the ball.
  * @author Alex Oesterling, axo
  * @version 1/19/20
  */
@@ -37,9 +34,8 @@ public class Ball extends PortalObject {
      */
     public Ball(String imagefile){
         super(imagefile);
-        double angle = Math.random()*Math.PI*2-Math.PI;
-        xVel = Math.cos(angle)*BALL_VELOCITY;
-        yVel = Math.sin(angle)*BALL_VELOCITY*-1;
+        xVel = Math.cos(Math.random()*Math.PI*2-Math.PI)*BALL_VELOCITY;
+        yVel = Math.sin(Math.random()*Math.PI*2-Math.PI)*BALL_VELOCITY*-1;
         this.getImage().setFitWidth(20);
         this.getImage().setFitHeight(20);
         mode = "normal";
@@ -65,9 +61,24 @@ public class Ball extends PortalObject {
             checkCollisionWithBumper();
             checkCollisionWithBrick();
         } else {
-            super.setX(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()-this.getImage().getFitWidth()/2);
-            super.setY(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterY() -30);
+            followBumper();
         }
+        formatText();
+        decayPowerUp(elapsedTime);
+    }
+
+    /**
+     * Makes ball stay "stuck" and move with bumper, happens pre-launch and when the ball goes out and resets
+     */
+    private void followBumper() {
+        super.setX(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()-this.getImage().getFitWidth()/2);
+        super.setY(this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterY() -30);
+    }
+
+    /**
+     * Formats the score and lives displays with the correct, updated information from the game
+     */
+    private void formatText() {
         if (this.getGroup().getChildren().get(2) instanceof Text) {
             ((Text) this.getGroup().getChildren().get(2)).setText("Score: " + score);
             ((Text) this.getGroup().getChildren().get(2)).setX(this.getScene().getWidth()-((Text) this.getGroup().getChildren().get(2)).getLayoutBounds().getWidth());
@@ -75,7 +86,6 @@ public class Ball extends PortalObject {
         if (this.getGroup().getChildren().get(3) instanceof Text) {
             ((Text) this.getGroup().getChildren().get(3)).setText("Lives: " + lives);
         }
-        decayPowerUp(elapsedTime);
     }
 
     /**
@@ -94,7 +104,7 @@ public class Ball extends PortalObject {
     }
 
     /**
-     * Move ball around stage at a certain velocity, and bounce off of walls or lose a life if it falls off the
+     * Move ball around stage at a certain velocity, and bounce off of walls or lose a life if it falls off the bottom
      * @param elapsedTime - Time update between frames
      */
     private void move(double elapsedTime) {
@@ -104,16 +114,11 @@ public class Ball extends PortalObject {
             if (this.getX() >= this.getScene().getWidth() - this.getImage().getBoundsInLocal().getWidth()) {
                 xVel *= -1;
             }
-            if (this.getX() <= 0) {
-                xVel *= -1;
-            }
-            if (this.getY() <= 0) {
-                yVel *= -1;
-            }
+            if (this.getX() <= 0) { xVel *= -1; }
+            if (this.getY() <= 0) { yVel *= -1; }
         } else {
-            double angle = Math.atan2(mouseY-this.getY(), mouseX-this.getX());
-            xVel = Math.cos(angle)*BALL_VELOCITY;
-            yVel = Math.sin(angle)*BALL_VELOCITY;
+            xVel = Math.cos(Math.atan2(mouseY-this.getY(), mouseX-this.getX()))*BALL_VELOCITY;
+            yVel = Math.sin(Math.atan2(mouseY-this.getY(), mouseX-this.getX()))*BALL_VELOCITY;
         }
         if(this.getY() >= this.getScene().getHeight()){
             launched = false;
@@ -126,15 +131,13 @@ public class Ball extends PortalObject {
      * Checks collision with bumper and changes velocity vectors as appropriate
      */
     private void checkCollisionWithBumper() {
-        if (this.getYVel() >= 0 && this.getImage().getBoundsInLocal().intersects(this.getGroup().getChildren().get(1).getBoundsInLocal())) {
-            double degree = Math.abs(this.getImage().getBoundsInLocal().getCenterX() - this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()) / (this.getGroup().getChildren().get(1).getBoundsInLocal().getWidth() / 2);
-            degree = Math.toRadians(90 * degree);
-            this.setYVel(Math.abs(Math.cos(degree) * BALL_VELOCITY) * -1);
-            double absXVel = Math.abs(Math.sin(degree) * BALL_VELOCITY);
+        if (yVel >= 0 && this.getImage().getBoundsInLocal().intersects(this.getGroup().getChildren().get(1).getBoundsInLocal())) {
+            double degree = Math.toRadians(90*Math.abs(this.getImage().getBoundsInLocal().getCenterX() - this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()) / (this.getGroup().getChildren().get(1).getBoundsInLocal().getWidth() / 2));
+            yVel = (Math.abs(Math.cos(degree) * BALL_VELOCITY) * -1);
             if (this.getImage().getBoundsInLocal().getCenterX() < this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()) {
-                this.setXVel(absXVel * -1);
+                xVel = (Math.abs(Math.sin(degree) * BALL_VELOCITY * -1));
             } else if (this.getImage().getBoundsInLocal().getCenterX() > this.getGroup().getChildren().get(1).getBoundsInLocal().getCenterX()) {
-                this.setXVel(absXVel);
+                xVel = (Math.abs(Math.sin(degree) * BALL_VELOCITY));
             }
         }
     }
@@ -150,9 +153,7 @@ public class Ball extends PortalObject {
                 if (!insideBricks) {
                     insideBricks = true;
                     inside = b;
-                    if(mode != "ghost") {
-                        b.collide(bricks);
-                    }
+                    if(mode != "ghost") { b.collide(bricks); }
                 }
                 if (mode != "ghost" && (mode != "wrecking ball" && (notportal) || destroyedBrick == false)) {
                     bounceBrick(b);
@@ -162,9 +163,7 @@ public class Ball extends PortalObject {
             } else if(inside != null && !checkIntersection(inside)){
                 if(insideBricks) {
                     insideBricks = false;
-                    if(mode == "ghost"){
-                        setMode("normal");
-                    }
+                    if(mode == "ghost"){ setMode("normal"); }
                 }
                 inside = null;
             } else if(checkIntersection(bricks.get(i))){
@@ -180,9 +179,8 @@ public class Ball extends PortalObject {
     public void ballKeyInput(KeyCode code) {
         if((code == KeyCode.SPACE || code == KeyCode.W) && !launched){
             launched = true;
-            double angle = Math.random()*Math.PI*2-Math.PI;
-            xVel = Math.cos(angle)*BALL_VELOCITY;
-            yVel = Math.sin(angle)*BALL_VELOCITY*-1;
+            xVel = Math.cos(Math.random()*Math.PI*2-Math.PI)*BALL_VELOCITY;
+            yVel = Math.sin(Math.random()*Math.PI*2-Math.PI)*BALL_VELOCITY*-1;
         }
         if(code == KeyCode.R){
             launched = false;
@@ -218,8 +216,8 @@ public class Ball extends PortalObject {
         Bounds bounds = this.getImage().getBoundsInLocal();
         return(brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX()+bounds.getWidth()/2, bounds.getCenterY(), 1, 1)
                 || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX()-bounds.getWidth()/2, bounds.getCenterY(), 1, 1)
-                || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX(), bounds.getCenterY()+bounds.getHeight()/2, 1, 1))
-                || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX(), bounds.getCenterY()-bounds.getHeight()/2, 1, 1);
+                || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX(), bounds.getCenterY()+bounds.getHeight()/2, 1, 1)
+                || brick.getImage().getBoundsInLocal().intersects(bounds.getCenterX(), bounds.getCenterY()-bounds.getHeight()/2, 1, 1));
     }
 
     /**
@@ -228,13 +226,13 @@ public class Ball extends PortalObject {
      */
     public void bounceBrick(Brick brick){
         if (this.getImage().getBoundsInLocal().getCenterX() <= brick.getImage().getBoundsInLocal().getMinX()) {
-            this.setXVel(Math.abs(this.getXVel()) * -1);
+            xVel = (Math.abs(xVel) * -1);
         } else if (this.getImage().getBoundsInLocal().getCenterX() >= brick.getImage().getBoundsInLocal().getMaxX()) {
-            this.setXVel(Math.abs(this.getXVel()));
+            xVel = (Math.abs(xVel));
         } else if (this.getImage().getBoundsInLocal().getCenterY() <= brick.getImage().getBoundsInLocal().getMinY()) {
-            this.setYVel(Math.abs(this.getYVel()) * -1);
+            yVel = (Math.abs(yVel) * -1);
         } else if (this.getImage().getBoundsInLocal().getCenterY() >= brick.getImage().getBoundsInLocal().getMaxY()) {
-            this.setYVel(Math.abs(this.getYVel()));
+            yVel = (Math.abs(yVel));
         }
     }
 
@@ -278,11 +276,6 @@ public class Ball extends PortalObject {
     public void setDestroyedBrick(boolean a){destroyedBrick = a;}
 
     /**
-     * @return the current score in the game
-     */
-    public int getScore(){return score;}
-
-    /**
      * @return the current lives left in the game
      */
     public int getLives(){return lives;}
@@ -298,28 +291,6 @@ public class Ball extends PortalObject {
      * @param s - a boolean representing whether or not the ball has been launched
      */
     public void setLaunched(boolean s){launched = s;}
-
-    /**
-     * @return the current velocity in the X direction
-     */
-    public double getXVel(){return xVel;}
-
-    /**
-     * @return the current velocity in the Y direction
-     */
-    public double getYVel(){return yVel;}
-
-    /**
-     * Sets the X velocity of the ball
-     * @param a - the new X velocity value
-     */
-    public void setXVel(double a){xVel = a;}
-
-    /**
-     * Sets the Y velocity of the ball
-     * @param b - the new Y velocity value
-     */
-    public void setYVel(double b){yVel = b;}
 
     /**
      * sets the powerup status of the ball

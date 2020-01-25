@@ -1,4 +1,3 @@
-
 package breakout;
 
 import javafx.animation.KeyFrame;
@@ -17,7 +16,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -32,9 +30,6 @@ import java.util.Scanner;
  * @version 1/19/20
  */
 public class Main extends Application {
-    /**
-     * Start of the program.
-     */
     public static final String TITLE = "PortalBreaker";
     public static final int SIZE = 400;
     public static final Paint BACKGROUND = Color.AZURE; //change to image?
@@ -47,7 +42,6 @@ public class Main extends Application {
     public static final String BUMPER_IMAGE = "paddle.gif";
     public static final String HEALTH_BRICK_IMAGE = "health.png";
     public static final int LEVEL_NUM = 3;
-
     private Scene myScene;
     private Ball ball;
     private Bumper bumper;
@@ -77,7 +71,6 @@ public class Main extends Application {
         stage.setScene(myScene);
         stage.setTitle(TITLE);
         stage.show();
-        //game loop
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> update(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -100,10 +93,8 @@ public class Main extends Application {
         levelText.setText(""+level);
         levelText.setFont(Font.font ("Verdana", 16));
         levelText.setFill(Color.RED);
-        score.setText("" + ball.getScore());
         score.setFont(Font.font ("Verdana", 20));
         score.setFill(Color.RED);
-        lives.setText("" + ball.getLives());
         lives.setFont(Font.font ("Verdana", 20));
         lives.setFill(Color.RED);
         essentials.getChildren().add(ball.getImage());
@@ -125,7 +116,6 @@ public class Main extends Application {
             int bricksLeft = 0;
             ball.update(elapsedTime);
             bumper.update(elapsedTime);
-            //pretty inefficient to keep counting the bricks over and over, could make a subtraction method in Ball class but I'd rather not.
             for (List list : brickList) {
                 for(Object b : list){
                     if(b instanceof Brick){
@@ -168,12 +158,10 @@ public class Main extends Application {
         roots.add(new Group());
         brickList = new ArrayList<List>();
         brickList.add(new ArrayList<Brick>());
-
         ball.setLaunched(false);
         ball.updateBricks(brickList.get(0));
         roots.get(0).getChildren().add(essentials);
         loadLevel(filename);
-
         Scene scene = new Scene(roots.get(0), SIZE, SIZE, BACKGROUND);
         scene.setOnKeyPressed(e -> {
             ball.ballKeyInput(e.getCode());
@@ -192,14 +180,10 @@ public class Main extends Application {
                 }
             }
         }
-        score.setX(myScene.getWidth()-score.getLayoutBounds().getWidth());
         score.setY(myScene.getHeight()-score.getLayoutBounds().getHeight());
-        lives.setX(0);
         lives.setY(myScene.getHeight()-lives.getLayoutBounds().getHeight());
         levelText.setY(myScene.getHeight()-4);
-
         bumper.setX(bumper.getScene().getWidth()/2 - bumper.getImage().getBoundsInLocal().getWidth()/2);
-        bumper.setY(bumper.getScene().getHeight()-bumper.getImage().getBoundsInLocal().getHeight());
         return scene;
     }
 

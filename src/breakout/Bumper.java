@@ -21,6 +21,7 @@ public class Bumper extends PortalObject {
 
         this.getImage().setFitHeight(20);
         this.getImage().setFitWidth(100);
+
     }
 
     /**
@@ -29,7 +30,7 @@ public class Bumper extends PortalObject {
      */
     @Override
     public void update(double elapsedTime) {
-        return;
+        this.setY(this.getScene().getHeight()-this.getImage().getBoundsInLocal().getHeight());
     }
 
     /**

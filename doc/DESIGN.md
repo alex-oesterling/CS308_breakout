@@ -21,11 +21,16 @@ Personally, after I finished refactoring and organizing my code, I was able to a
 bricks in the span of an hour because of how easy it was to extend the Brick class
 and modify its collision method by a slight bit for each new brick.  
 
-One design I failed at was adding multiple balls. I have a "switch case" or large if tree
+I also created an abstract PortalObject class for a similar reason: If a new programmer
+wanted to add a new type of object to the game, they could extend the PortalObject class to create new objects
+with x positions, y positions, ImageView objects to be rendered, and scene data. This was another
+goal of my design to make extension of the code easier.
+
+One design I failed at was adding multiple balls. I have a "switch case"
 scenario for my ball, where an internal string stores its "status" as powered up or not, and
-which type of power. Then, it has as series of if statements changing its rendering depending
+which type of power. It has as series of if statements changing its rendering depending
 on this string. If I were to redo this portion I would also make a Ball hierarchy allowing 
-for the easy implementation of newer and newer balls.
+for the easy implementation of newer and newer balls. This is something I want to improve upon in my next project.
 ### High-level design of project: Purpose and interaction of classes
 The high level perspective on this project is that it takes 4 base classes: a ball, a brick, a bumper, and a main method.
 The main method handles the instantiation of the game: The creation of scenes, the creation
