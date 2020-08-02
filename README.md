@@ -1,3 +1,5 @@
+### *This was my first project for CS308: Advanced Software Design and Implementation. It was my first experience writing an entire multiclass program from start to finish, and I am incredibly proud of it. Although we hadn't learned some of these concepts yet, I implemented inheritance using abstract classes to streamline my project.*
+
 game
 ====
 
@@ -16,7 +18,7 @@ Hours Spent:
 ### Resources Used
 Google
 StackExchange
-TA's: Jack Proudfoot, Anna Darwish
+TA's: ***********************
 JavaFX Tutorial
 ### Running the Program
 
